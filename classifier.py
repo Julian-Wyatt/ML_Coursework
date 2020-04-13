@@ -251,6 +251,10 @@ def dataGather():
 	averagecwk.reset_index(level=0, inplace=True)
 	stuInfo = stuInfo.merge(averagecwk, how="outer", on=["id_student"])
 
+	averagecwk = pandas.DataFrame(stuAssessments.groupby("id_student")["score"].sum())
+	averagecwk.reset_index(level=0, inplace=True).rename(columns={'score':'totalScore'})
+	stuInfo = stuInfo.merge(averagecwk, how="outer", on=["id_student"])
+
 	# get the mean score for a given person's daysEarly
 	daysEarlyAvg = stuInfo.groupby("daysEarly")["score"].mean() \
 		.reset_index(level=0).rename(columns={"score": "daysEarlyAvgScore"})
