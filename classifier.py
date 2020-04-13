@@ -87,8 +87,8 @@ def plotSave(name, dataX, nameX, dataY, nameY):
 	plt.ylabel(nameY)
 	plt.title(name)
 	saveFigure(name)
-
-
+pandas.set_option('display.max_columns', 500)
+pandas.set_option('display.width', 1000)
 
 #####################---DATA GATHERING---#####################
 
@@ -351,15 +351,13 @@ def dataGather():
 	stuInfo = stuInfo.merge(attemptsAvg, how="outer", on=["num_of_prev_attempts"])
 
 	# get the weighted score of the assessments ie the summative scores
-	temp = (all_Assessments["score"] * all_Assessments["weight"])
+	temp = (all_Assessments["score"] * all_Assessments["weight"]/100)
 	all_Assessments.insert(loc=0, value=temp, column="weightedScore")
 
 	summative = all_Assessments.groupby(["id_student","code_module", "code_presentation"])["weightedScore"].sum()
-	summative = summative / 100
 	summative = pandas.DataFrame(summative).rename(columns={"weightedScore": "summative"})
 	summative.reset_index(level=0, inplace=True)
-	print(summative)
-	print(all_Assessments)
+
 	# get the formative scores ie where the course weighting is 0
 	temp = all_Assessments[["id_student","code_module", "code_presentation", "score"]].where(all_Assessments["weight"] == 0)
 
@@ -449,7 +447,7 @@ def dataGather():
 	# scale the summative score based on the number of credits they studied
 	# otherwise they had a summative score over 100%
 	modelData["summative"] = modelData["summative"] / modelData["studied_credits"]
-	summative.rename(columns={"summative": "summativeNonScaled"}, inplace=True)
+	summative.rename(columns={"summative": "summativeAgainstCredits"}, inplace=True)
 	modelData = modelData.merge(summative, how="outer", on=["id_student","code_module", "code_presentation"])
 
 	# make final result categorical, order it then swap the column to only use to codes
@@ -481,7 +479,7 @@ def dataGather():
 	modelData["code_presentation"] = modelData["code_presentation"].astype("category").cat.codes
 
 
-	# modelData = modelData.drop(columns = ["code_module","code_presentation"])
+	modelData = modelData.drop(columns = ["id_student","code_module","code_presentation"])
 
 	# # if submission version, save the scatter matrix of each of the attributes of data I am using
 	# if submission:
@@ -553,13 +551,8 @@ attributes.remove("final_result")
 def modelSelectionScore(model, Name=""):
 	print("%s: " % (
 				model.__class__.__name__ + Name))
-	try:
-		scores = model_selection.cross_val_score(model, train[attributes], train["final_result"], cv=5, scoring="accuracy")
-	except TypeError:
-		if model.__class__.__name__.lower()=="OneClassSVM":
-			scores = model_selection.cross_val_score(model, train, cv=5, scoring="accuracy")
-		else:
-			scores = model_selection.cross_val_score(model, train[attributes], train["final_result"], cv=5, scoring="accuracy")
+
+	scores = model_selection.cross_val_score(model, train[attributes], train["final_result"], cv=5)
 
 	print("Accuracy:  " + str(scores))
 	print("Mean Accuracy Across folds:  " + str(scores.mean()))
@@ -713,7 +706,7 @@ def hypertuning(modelA, modelB):
 
 	if modelB:
 
-		estimatorsRange = [250, 300, 350, 400, 500, 600, 1500,2000]
+		estimatorsRange = [50,75,100,125,150,200,250, 300, 350, 400, 500]
 		train_score, test_score = model_selection.validation_curve(
 			forClass,
 			X=train[attributes], y=train["final_result"],
@@ -736,13 +729,13 @@ def hypertuning(modelA, modelB):
 
 
 
-		param_random = {"n_estimators":[300],"max_depth": range(1, 128), "min_samples_leaf": range(1, 128),
+		param_random = {"n_estimators":[250],"max_depth": range(1, 128), "min_samples_leaf": range(1, 128),
 		                "min_samples_split": [2, 3, 4]}
 
 		# njobs = -1 means use all available cores
 		forGridSearch = model_selection.RandomizedSearchCV(forClass, param_random, refit=True, cv=5,
 		                                                   return_train_score=True,
-		                                                   n_jobs=-1, random_state=random_state, n_iter=5,
+		                                                   n_jobs=-1, random_state=random_state, n_iter=125,
 		                                                   verbose=False)
 
 		forSearch = forGridSearch.fit(train[attributes], train["final_result"])
@@ -760,7 +753,7 @@ def hypertuning(modelA, modelB):
 		feature_importances = [(feature, round(importance, 5)) for feature, importance in zip(attributes, importances)]
 		feature_importances = sorted(feature_importances, key=lambda x: x[1], reverse=True)
 
-		# [print('Variable: {:35} Importance: {}'.format(*pair)) for pair in feature_importances]
+		[print('Variable: {:35} Importance: {}'.format(*pair)) for pair in feature_importances]
 
 		# List of features sorted from most to least important
 		sorted_importances = [importance[1] for importance in feature_importances]
@@ -778,14 +771,14 @@ def hypertuning(modelA, modelB):
 		plt.title('Cumulative Importances');
 		saveFigure("Importances")
 
-		sizeFeatures = np.where(cumulative_importances > 0.95)[0][0]
+		sizeFeatures = np.where(cumulative_importances > 0.8)[0][0]
 		importantFeatures = sorted_features[:sizeFeatures]
 
 
 		# njobs = -1 means use all available cores
 		forGridSearch = model_selection.RandomizedSearchCV(forClass, param_random, cv=5, refit=True,
 		                                                   return_train_score=True,
-		                                                   n_jobs=-1, random_state=random_state, n_iter=5,
+		                                                   n_jobs=-1, random_state=random_state, n_iter=125,
 		                                                   verbose=False)
 
 		forSearch = forGridSearch.fit(train[importantFeatures], train["final_result"])
@@ -868,4 +861,5 @@ def hypertuning(modelA, modelB):
 
 
 # modelSelection()
+modelSelectionScore(forClass)
 hypertuning(False, True)
