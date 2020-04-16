@@ -645,7 +645,7 @@ def modelSelection():
 
     subtrain, subtest = model_selection.train_test_split(train, random_state=random_state, test_size=0.2)
 
-    modelSelectionScore(linRegr,4)
+    modelSelectionScore(linRegr,classes=4)
 
     # Linear Regr plots ##################################################################################
     # graph 4 data points for linear regression to compare
