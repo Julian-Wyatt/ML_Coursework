@@ -47,11 +47,11 @@ I expected these features to show a positive correlation because typically highe
 Then, I plotted the data and noticed that a logistic regression model should perform highly. 
 I added more data to my model, to use as much data as possible so the model can find patterns easier.
 Further, I calculated how many days early a student submitted coursework using the date submitted column.
-Ideally, I expected a positive correlation as the student would be more prepared and commited.
+Ideally, I expected a positive correlation as the student would be more prepared and committed.
 In addition, I calculated their summative and formative (where their weight is 0) marks. 
 % I noticed this gradually improved the performance of my model, so I continued adding further data.
-I eventually included almost all of the data available, so I started to look at the data differently so I included the mean, mean absolute deviation, standard deviation, varience etc for the scores of students' coursework.
-This therefore can find patterns from extrapolated data to squeeze more patterns out of the schema. 
+I eventually included almost all of the data available, so I started to look at the data differently so I included the mean, mean absolute deviation, standard deviation, variance etc for the scores of students' coursework.
+This, therefore, can find patterns from extrapolated data to squeeze more patterns out of the schema. 
 I then produced a correlation heatmap as seen below, as well as the sorted numerical correlations.
 
 
@@ -73,32 +73,31 @@ I then produced a correlation heatmap as seen below, as well as the sorted numer
 		\label{table:Correlations}
 \end{table}
 
-Surprisingly, age\_band has a poor correlation, in theory you would expect a mild negative correlation. Although this could be because of the limited data (3 unique ranges). To improve this correlation, I would need specific precise data.
-
+Surprisingly, age\_band has a poor correlation; in theory, you would expect a mild negative correlation. Although this could be because of the limited data (3 unique ranges). To improve this correlation, I would need specific precise data.
 
 After data gathering, I preprocessed the data, with an imputer and scaler. The imputer changes all NA values to the median of that feature. 
-While the scaler, normalises features to be within $0-1$, this prevents feature domination with large ranges and makes the features unit dependent
-Further, I exchanged region, code module and code presentation to columned data by one hot encoding those categories.
+While the scaler, normalises features to be within $0-1$, this prevents feature domination with large ranges and makes the features unit dependent.
+Further, I exchanged region, code module and code presentation to columned data by one-hot encoding those categories.
 
 \section{Model Selection}
 
-The following phase was selecting a model. Here, I split the data into train and test sets with a 75/25 split; then tested a variety of models and compared how they performed in cross validation on the training data.
+The following phase involved selecting models. Here, I split the data into train and test sets with a 75/25 split; then tested a variety of models and compared how they performed in cross-validation on the training data. 
 
 
 
 \section{Model A - Logistic Regression}
 
-After I picked logistic regression, I began my hyperparameter tuning. For this model, I decided to use a grid search to validate the best parameter within the permutations I provided. 
-I gave the model, two potential sets of permutations, the first, cycled through the C value, which is the regularisation strength; smaller values show a stronger strength, 
-so I started with a strong logarithmic scale to check through, until after enough testing I used the range between 950 and 1125. It also cycled through the tolerance value with small values around the default of 0.0001.
-The other set of permutations loop through a similar set of values of C and adjusts the max number of iterations model uses to fit the data and find patterns.
+Moving on to hyperparameter tuning. For this model, I decided to use a grid search to validate the best combination within the combinations I provided. 
+I gave the model, two potential sets of combinations, the first, cycled through the C value, which is the regularisation strength; smaller values show a stronger strength, 
+so I started with a strong logarithmic scale to check through, until after enough testing I reached a range of 850-1000. It also cycled through the tolerance value with small values around the default of 0.0001.
+The other set of combinations check a the same values of C and adjusts the solver \& penalty used. Finally, I removed the second set of combinations as it did not prove to help increase accuracy.
 
-\section{Model B - Random Forest Regressor}
+\section{Model B - Random Forest Classifier}
 
-Following my logistic hyperparameter tuning, I tuned my random forrest regressor, using a random search. This randomly picks n permutations to validate the model against based on the given parameters.
-I decided to check the number of estimators (trees in forrest), the max depth of each tree in the forrest, the minimum number of samples required at a leaf node, \& the minimum number of samples required to split an internal node.
-As the random search prefers ranges, all of these values are provided with the python range type so it can pick any value within the range. This lead to picking 20 out of 244,800 permutations of parameters.
-
+Then, I tuned my random forest classifier, initially using a random search. This randomly picks n combinations to validate the model against based on the chosen parameters.
+I decided to check the number of estimators (trees in the forest), the max depth of each tree in the forest, the minimum number of samples required at a leaf node, \& the minimum number of samples required to split an internal node.
+I moved on to use bayesian optimisation in order to minimise this complex search problem. This uses the previous iterations to strategically pick the next best parameters to pick from the search space with the aim of reducing the loss function. 
+Following on, I remove the unimportant features from the forest's feature importances \ref{} and hyper tune again in order to further improve the model. I noticed during this, the number of estimators showed little correlation for the model improving the loss function \ref{}.  
 \section{Conclusion}
 
 \begin{table}[H]
@@ -122,31 +121,55 @@ In conclusion, the logistic regression model finished with an accuracy of 0.68\%
 Upon further inspection and validation on the testing data set, the maxiumum error was 0.3 lower for the random forrest, \& the r2 score was 0.25 higher for random forrest, potentially making random forrest overall a better choice.
 
 \section*{Appendix}
+
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{LinearRegression_2_class_model_against_score.png} 
+	\label{fig:LinScore}
+\end{figure}
 \centering
-% \begin{figure}[H]
-% 	\includegraphics[width=0.95\linewidth]{age_band_linear_model.png} 
-% 	\caption{Age band against Final Result Linear Regression Model}
-% 	\label{fig:AgeLin}
-% \end{figure}
-% \centering
-% \begin{figure}[H]
-% 	\includegraphics[width=0.95\linewidth]{sum_click_SVR_linear_model.png} 
-% 	\caption{Total VLE clicks against Final Result SVR (Linear Kernel) Regression Model}
-% 	\label{fig:clickSVRLin}
-% \end{figure}
-% \centering
-% \begin{figure}[H]
-% 	\includegraphics[width=0.95\linewidth]{score_linear_model.png} 
-% 	\caption{Score against Final Result Linear Regression Model}
-% 	\label{fig:scoreLinear}
-% \end{figure}
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{LinearRegression_2_class_model_against_age_band.png} 
+	\label{fig:LinAge}
+\end{figure}
+\centering
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{LogisticRegression_2_class_model_against_score.png} 
+	\label{fig:LogScore}
+\end{figure}
+\centering
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{LogisticRegression_2_class_model_against_summative.png} 
+	\label{fig:LogSumm}
+\end{figure}
+\centering
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{Importances.png} 
+	\label{fig:importances}
+\end{figure}
+\centering
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{Accuracy_against_iteration1.png} 
+	\label{fig:Acc1}
+\end{figure}
+\centering
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{SVR_2_class_model_against_sum_click-Polynomial_Kernel.png} 
+	\label{fig:PolyClicks}
+\end{figure}
+\centering
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{Estimators_against_iteration.png} 
+	\label{fig:estimators}
+\end{figure}
+\centering
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{Accuracy_against_iteration2.png} 
+	\label{fig:Acc2}
+\end{figure}
 
+\begin{figure}[b]
+	\includegraphics[width=2\linewidth]{heatmap.png} 
+	\label{fig:Acc2}
+\end{figure}
 
-
-% \begin{figure}[H]
-% 	\includegraphics[width=\linewidth]{score_linear_model.png} 
-% 	\caption{Score against Final Result Linear Regression Model}
-% 	\label{fig:scoreLinear}
-% \end{figure}
-	
 \end{document}

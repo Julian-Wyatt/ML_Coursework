@@ -1,22 +1,17 @@
-# days submitted before submission date
-# total number of times visited VLE - tick  - try with logistic regression
-# coursework marks - tick - split into weighted summative, formative, and total average
-# number of previous attempts - tick - direct access
-# MDI - multiple deprivation index 
+# In order to run this classifier, ensure you have the following packages installed
+# (although this code will attempt to install those missing *Checked on a UNIX based system)
+# package checklist
+# pandas, numpy, sklearn, seaborn, matplotlib, hyperopt
+# Once these packages are installed - execute the code in terminal with python classifier.py
+# or through an IDE
+# Also note, the code will check for the data CVS's within the Dataset folder, if this fails, it will check in the cwd
+# Similarly for saved figures, these will be saved in ./Saved_Figs - if this fails they will be saved in the cwd
 
-# do cross validation - works as splitting up training set into different subsets of training and validation
-
-# need to install pandas, numpy,sklearn
-
-submission = False
-mira = True
-
+# random state seed to ensure repeatable metrics
 random_state = 1024
 
-# runs a command line process to install a package if an error occurs due to that
+# runs a command line process to install a package if an ImportError occurs
 import subprocess
-
-
 def install(package):
     subprocess.run([sys.executable, "-m", "pip", "install", package, "--user"])
 
@@ -26,33 +21,45 @@ try:
 except ImportError:
     install("pandas")
     import pandas
-from pandas.plotting import scatter_matrix
 
 try:
     from sklearn import *
-    from sklearn import model_selection
-    from sklearn import utils
 except ImportError:
     install("sklearn")
     from sklearn import *
-    from sklearn import model_selection
-    from sklearn import utils
+
+from sklearn import model_selection
+from sklearn import utils
+
+# import default python modules
 import os
 import sys
-import numpy as np
-import matplotlib as mpl
+import time
+import warnings
+warnings.filterwarnings('ignore')   # ignore division by 0 warning when measuring precision in RF hyper tuning
 
+# import numpy & matplotlib
+try:
+    import numpy as np
+except ImportError:
+    install('numpy')
+    import numpy as np
+try:
+    import matplotlib as mpl
+except ImportError:
+    install('matplotlib')
+    import matplotlib as mpl
 mpl.rcParams['figure.dpi'] = 300
 import matplotlib.pyplot as plt
-import time
-import re
 
+# import seaborn for heatmap
 try:
     import seaborn as sns
 except ImportError:
     install("seaborn")
     import seaborn as sns
 
+# import hyperopt for hyperparameter optimisation using bayesian optimisation
 try:
     import hyperopt
 except ImportError:
@@ -94,6 +101,8 @@ def plotSave(name, dataX, nameX, dataY, nameY):
     plt.ylabel(nameY)
     plt.title(name)
     saveFigure(name)
+
+# sets pandas output to display all columns
 pandas.set_option('display.max_columns', 500)
 pandas.set_option('display.width', 1000)
 
@@ -104,28 +113,26 @@ start = time.time()
 
 # set current working directory
 path = os.getcwd() + "/"
-# try looking for the data csv files in the dataset folder
-try:
-    stuVLE = pandas.read_csv(path + "Dataset/studentVle.csv", na_values=['no info', ' '], header=0)
-    stuInfo = pandas.read_csv(path + "Dataset/studentInfo.csv", na_values=['no info', ' '], header=0)
-    stuAssessments = pandas.read_csv(path + "Dataset/studentAssessment.csv", na_values=['no info', ' '], header=0)
-    assessments = pandas.read_csv(path + "Dataset/assessments.csv", na_values=['no info', ' '], header=0)
-    courses = pandas.read_csv(path + "Dataset/courses.csv", na_values=['no info', ' '], header=0)
-# however this folder may not exist during submission so look in cwd instead
-except FileNotFoundError:
-    stuVLE = pandas.read_csv(path + "studentVle.csv", na_values=['no info', ' '], header=0)
-    stuInfo = pandas.read_csv(path + "studentInfo.csv", na_values=['no info', ' '], header=0)
-    stuAssessments = pandas.read_csv(path + "studentAssessment.csv", na_values=['no info', ' '], header=0)
-    assessments = pandas.read_csv(path + "assessments.csv", na_values=['no info', ' '], header=0)
-    courses = pandas.read_csv(path + "courses.csv", na_values=['no info', ' '], header=0)
-
 
 def dataGather():
-    global stuVLE
-    global stuInfo
-    global stuAssessments
-    global assessments
-    global courses
+    '''
+    Gather data from the csv's stored in ./Dataset/ or in ./
+    :return: modelData - ie the gathered information stored about each row in stuInfo
+    '''
+    # try looking for the data csv files in the Dataset folder
+    try:
+        stuVLE = pandas.read_csv(path + "Dataset/studentVle.csv", na_values=['no info', ' '], header=0)
+        stuInfo = pandas.read_csv(path + "Dataset/studentInfo.csv", na_values=['no info', ' '], header=0)
+        stuAssessments = pandas.read_csv(path + "Dataset/studentAssessment.csv", na_values=['no info', ' '], header=0)
+        assessments = pandas.read_csv(path + "Dataset/assessments.csv", na_values=['no info', ' '], header=0)
+        courses = pandas.read_csv(path + "Dataset/courses.csv", na_values=['no info', ' '], header=0)
+    # however this folder may not exist during submission so look in cwd instead
+    except FileNotFoundError:
+        stuVLE = pandas.read_csv(path + "studentVle.csv", na_values=['no info', ' '], header=0)
+        stuInfo = pandas.read_csv(path + "studentInfo.csv", na_values=['no info', ' '], header=0)
+        stuAssessments = pandas.read_csv(path + "studentAssessment.csv", na_values=['no info', ' '], header=0)
+        assessments = pandas.read_csv(path + "assessments.csv", na_values=['no info', ' '], header=0)
+        courses = pandas.read_csv(path + "courses.csv", na_values=['no info', ' '], header=0)
 
     # firstly look towards the vle stats
     # so I collected the total number of times they clicked on their portal
@@ -139,14 +146,11 @@ def dataGather():
     visits.reset_index(level=0, inplace=True)
 
     # sum click stats
-
     # get the variance of the sum_click of a given module
     assessment_var = stuVLE.groupby(["code_module", "code_presentation"])["sum_click"].var() \
         .reset_index(level=1).rename(columns={"sum_click": "sum_click_assessment_var"})
 
     stuInfo = stuInfo.merge(assessment_var, how="outer", on=["code_module", "code_presentation"])
-
-
 
     # get the mean of the sum_click of a given module
     assessment_mean = stuVLE.groupby(["code_module", "code_presentation"])["sum_click"].mean() \
@@ -190,7 +194,6 @@ def dataGather():
 
     # function to convert a ranged value to the median value of that range
     # based on the regex - ([0-9]*)\-([0-9]*)(%?)
-
     def rangeToMed(m):
         """
         function to convert a ranged value to the median value of that range
@@ -223,7 +226,7 @@ def dataGather():
     # as well as the individual student scores
     all_Assessments = stuAssessments.merge(assessments)
 
-    # if someone has banked their data, I set their date submitted as the median to not skew data, as it originally used 0
+    # if someone has banked their data, set their date submitted as the median to prevent skew, as it originally used 0
     temp = all_Assessments.where(all_Assessments["is_banked"] == 1)
 
     # find those medians
@@ -455,6 +458,7 @@ def dataGather():
     modelData = modelData.merge(formative, how="outer", on=["id_student","code_module", "code_presentation"])
     modelData = modelData.merge(visits, how="outer", on=["id_student"])
 
+    modelData['formative'] = modelData['formative'].fillna(0)
     # scale the summative score based on the number of credits they studied
     # otherwise they had a summative score over 100%
     modelData["summative"] = modelData["summative"] / modelData["studied_credits"]
@@ -491,28 +495,23 @@ def dataGather():
     modelData["code_module"] = modelData["code_module"].astype("category")
     modelData["code_presentation"] = modelData["code_presentation"].astype("category")
 
-
-    # modelData = modelData.drop(columns = ["id_student","code_module","code_presentation"])
-
-    # # if submission version, save the scatter matrix of each of the attributes of data I am using
-    # if submission:
-    #     # remove some of the columns to make the chart look less cluttered
-    #     scatter_matrix(modelData.drop(columns=["age_band","gender","imd_band","highest_education","sum_click_assessment_std","sum_click_student_med","sum_click_student_std","sum_click_student_mad","disability","assessment_mad","studied_credits","is_banked","assessment_Meds"]), figsize=(27, 20))
-    #     saveFigure("ModelDataMatrix")
-
     return modelData
 
 
 def preprocessingFunction(modelData):
+    '''
+    categorise region & impute / scale numerical data
+    :param modelData: the gathered data for a given row in stuInfo
+    :return: the processed modelData
+    '''
     #####################---DATA Pre-Processing---#####################
     print(modelData.describe())
     # descriptions of the data gathered
 
-
     # generate the list of numerical and categorical attributes
-    attributes = set(list(modelData.columns)).difference({"final_result","final_result2","final_result3","id_student"})
-    num_attributes = attributes.difference({"region","code_module", "code_presentation"})
-    cat_attributes = attributes.difference(num_attributes)
+    features = set(list(modelData.columns)).difference({"final_result","final_result2","final_result3","id_student"})
+    num_attributes = features.difference({"region","code_module", "code_presentation"})
+    cat_attributes = features.difference(num_attributes)
     num_attributes = list(num_attributes)
     cat_attributes = list(cat_attributes)
 
@@ -533,23 +532,27 @@ def preprocessingFunction(modelData):
     print("Finished data gather - Time elapsed {:.2f}".format(time.time() - start))
     # output the correlations & heatmap
     corr = modelData.corr()
-    with pandas.option_context('display.max_rows', None, 'display.max_columns', None):
-        print(corr["final_result"].sort_values())
+    corr = corr.reindex(corr['final_result'].sort_values()
+                        .reset_index(level=0).iloc[:,0],axis=1).sort_values(by=['final_result'])
+    with pandas.option_context('display.max_rows',None,'display.max_columns',None):
+        print(corr["final_result"])
 
-    sns.set(font_scale=0.4)
+    # produce & save heatmap based on correlations
+    sns.set(font_scale=0.35)
     plt.figure()
-    heatmap = sns.heatmap(corr.sort_values(by=['final_result'],), cmap="YlOrRd", xticklabels=corr.columns,
+
+    heatmap = sns.heatmap(corr, cmap="YlOrRd",
+                          xticklabels=corr.columns,
                           yticklabels=corr.columns,
                           annot=False, cbar_kws={'label': 'Correlation'})
+    plt.xlabel('Features')
     figure = heatmap.get_figure()
     saveFigure("heatmap")
 
     return modelData
 
-
+# run above functions
 modelData = dataGather()
-
-
 modelData = preprocessingFunction(modelData)
 
 # split the model data into test and training data
@@ -557,22 +560,45 @@ train, test_final = model_selection.train_test_split(modelData, random_state=ran
 
 #####################---Model Selection---#####################
 
+# Define features to use for fitting
 attributes = list(modelData.columns)
 attributes.remove("final_result")
 attributes.remove("final_result2")
 attributes.remove("final_result3")
+regreAttributes = attributes.copy()
+regreAttributes.remove('id_student')
+
+# initialise regression & classification objects
+
+# set logistic regression to use multinomial class
+# have a max iterations of 10000 (struggles to find pattern otherwise)
+logRegr = linear_model.LogisticRegression(multi_class='multinomial', max_iter=100000)
+linRegr = linear_model.LinearRegression()
+decClass = tree.DecisionTreeClassifier()
+forClass = ensemble.RandomForestClassifier( class_weight='balanced')
+svrRegr = svm.SVR(kernel="linear")
+svrPolyRegr = svm.SVR(kernel="poly")
+svrRBF = svm.SVR(kernel="rbf")
+svmC = svm.SVC(class_weight='balanced')
 
 
-def modelSelectionScore(model, Name="", classes=4):
+def modelSelectionScore(model,features, Name="", classes=4):
+    '''
+    Run cross val score on the model provided, printing the findings
+    :param model: model instance ie logisticRegression or RandomForestClassifier
+    :param features: which feature set to use (ie regreAttributes or attributes - model dependant)
+    :param Name: Any add on to the name provided through the model's class
+    :param classes: How many classes to train the data on
+    '''
     print("%s: " % (
             model.__class__.__name__ + Name))
-
+    scores = None
     if classes == 4:
-        scores = model_selection.cross_val_score(model, train[attributes], train["final_result"], cv=5)
+        scores = model_selection.cross_val_score(model, train[features], train["final_result"], cv=5, n_jobs=-1)
     elif classes == 3:
-        scores = model_selection.cross_val_score(model, train[attributes], train["final_result3"], cv=5)
+        scores = model_selection.cross_val_score(model, train[features], train["final_result3"], cv=5, n_jobs=-1)
     elif classes == 2:
-        scores = model_selection.cross_val_score(model, train[attributes], train["final_result2"], cv=5)
+        scores = model_selection.cross_val_score(model, train[features], train["final_result2"], cv=5, n_jobs=-1)
     else:
         exit()
 
@@ -583,7 +609,16 @@ def modelSelectionScore(model, Name="", classes=4):
 
 
 def plots(model, subtrain, subtest, feature, Name="", logistic=False):
-    print("\n{name} model against {featureName}".format(name=model.__class__.__name__,
+    '''
+
+    :param model: model to plot againt
+    :param subtrain: subtrain split
+    :param subtest: subtest split
+    :param feature: which feature to train and plot against
+    :param Name: Name of the model
+    :param logistic: boolean for non linear plots - using probabilities instead
+    '''
+    print("\n{name} model against {featureName}".format(name=model.__class__.__name__+Name,
                                                         featureName=feature.replace("_", " ")))
     model.fit(np.array(subtrain[feature]).reshape(-1, 1), np.array(subtrain["final_result2"]).ravel())
 
@@ -597,43 +632,22 @@ def plots(model, subtrain, subtest, feature, Name="", logistic=False):
         pass
     # The mean squared error
     print('Mean squared error: %.2f'
-          % metrics.mean_squared_error(subtest["final_result"], featurePred))
-    # The mean squared error
+          % metrics.mean_squared_error(subtest['final_result2'], featurePred))
+    # The r2 accuracy
     print('r2 Accuracy Score: %.2f'
-          % metrics.r2_score(subtest["final_result"], featurePred))
-    # The mean squared error
+          % metrics.r2_score(subtest["final_result2"], featurePred))
+    # The score
     print('Score: %.2f'
           % model.score(np.array(subtrain[feature]).reshape(-1, 1), np.array(subtrain["final_result2"]).ravel()))
-    # The coefficient of determination: 1 is perfect prediction
-    print('Coefficient of determination: %.2f'
-          % metrics.r2_score(subtest["final_result"], featurePred))
+    # if not linear plot the probability
     if logistic:
-        featurePred = model.predict_proba(np.array(subtest[feature]).reshape(-1, 1))[:, 1] * 3
+        featurePred = model.predict_proba(np.array(subtest[feature]).reshape(-1, 1))[:, 1] + 1
 
-    if not submission:
-        featurePred.sort()
-
-        plt.plot(subtest[feature].sort_values(), featurePred, color='blue', linewidth=1)
-        # plt.plot(subtest[feature].sort_values(), featurePred, color='blue', linewidth=1)
-        plotSave("{name} 2 class model against {featureName}".format(
-            name=model.__class__.__name__, featureName=(feature.replace("_", " ")) + Name),
-            subtest[feature], feature.replace("_", " "), subtest["final_result2"], "final result - 2 class")
-
-
-
-# initialise regression objects
-
-# set logistic regression to use multinomial class
-# have a max iterations of 10000 (struggles to find pattern otherwise)
-logRegr = linear_model.LogisticRegression(multi_class='multinomial', max_iter=100000)
-linRegr = linear_model.LinearRegression()
-decClass = tree.DecisionTreeClassifier()
-forClass = ensemble.RandomForestClassifier( class_weight='balanced')
-svrRegr = svm.SVR(kernel="linear")
-svrPolyRegr = svm.SVR(kernel="poly")
-svrRBF = svm.SVR(kernel="rbf")
-svmC = svm.SVC(class_weight='balanced')
-svmC = multioutput.MultiOutputClassifier(svmC,n_jobs=-1)
+    featurePred.sort()
+    plt.plot(subtest[feature].sort_values(), featurePred, color='blue', linewidth=1)
+    plotSave("{name} 2 class model against {featureName}".format(
+        name=model.__class__.__name__ + Name, featureName=feature.replace("_", " ")),
+        subtest[feature], feature.replace("_", " "), subtest["final_result2"], "final result - 2 class")
 
 
 
@@ -645,7 +659,7 @@ def modelSelection():
 
     subtrain, subtest = model_selection.train_test_split(train, random_state=random_state, test_size=0.2)
 
-    modelSelectionScore(linRegr,classes=4)
+    modelSelectionScore(linRegr,regreAttributes, classes=4)
 
     # Linear Regr plots ##################################################################################
     # graph 4 data points for linear regression to compare
@@ -659,50 +673,53 @@ def modelSelection():
     plots(linRegr, subtrain, subtest, "imd_band")
 
     # Logistic
-    modelSelectionScore(logRegr,Name=" - 4 classes", classes=4)
-    modelSelectionScore(logRegr,Name=" - 3 classes", classes=3)
-    modelSelectionScore(logRegr,Name=" - 2 classes", classes=2)
+    modelSelectionScore(logRegr,regreAttributes,Name=" - 4 classes", classes=4)
+    modelSelectionScore(logRegr,regreAttributes,Name=" - 3 classes", classes=3)
+    modelSelectionScore(logRegr,regreAttributes,Name=" - 2 classes", classes=2)
 
     plots(logRegr, subtrain, subtest, "score", logistic=True)
-    #
-    # # SVR Linear
-    modelSelectionScore(svrRegr, " - Linear Kernel")
-    #
-    # # SVR Linear plots ##################################################################################
-    # # graph 3 data points for svr linear regression to compare
-    #
+    plots(logRegr, subtrain, subtest, "summative", logistic=True)
+    # SVR Linear
+    modelSelectionScore(svrRegr,regreAttributes, " - Linear Kernel")
+
+    # SVR Linear plots ##################################################################################
+    # graph 3 data points for svr linear regression to compare
+
     plots(svrRegr, subtrain, subtest, "sum_click", "-Linear_Kernel")
 
     plots(svrRegr, subtrain, subtest, "score", "-Linear_Kernel")
 
     plots(svrRegr, subtrain, subtest, "imd_band", "-Linear_Kernel")
-    #
-    # # SVR Poly
-    modelSelectionScore(svrPolyRegr, " - Polynomial Kernel")
-    #
-    # # SVR poly plots ##################################################################################
-    # # graph 3 data points for svr linear regression to compare
-    #
+
+    # SVR Poly
+    modelSelectionScore(svrPolyRegr,regreAttributes, " - Polynomial Kernel")
+
+    # SVR poly plots ##################################################################################
+    # graph 3 data points for svr linear regression to compare
+
     plots(svrPolyRegr, subtrain, subtest, "sum_click", "-Polynomial_Kernel")
 
     plots(svrPolyRegr, subtrain, subtest, "score", "-Polynomial_Kernel")
 
     plots(svrPolyRegr, subtrain, subtest, "age_band", "-Polynomial_Kernel")
-    #
-    #
-    modelSelectionScore(svrRBF, " - RBF Kernel")
 
-    modelSelectionScore(svmC," - 4 classes",4)
-    modelSelectionScore(svmC," - 3 classes",3)
-    modelSelectionScore(svmC," - 2 classes",2)
+    # SVR RBF (Current Sklearn Default)
+    modelSelectionScore(svrRBF,regreAttributes, " - RBF Kernel")
 
-    modelSelectionScore(decClass," - 4 classes",4)
-    modelSelectionScore(decClass, " - 3 classes", 3)
-    modelSelectionScore(decClass, " - 2 classes", 2)
+    # SVM Classifier
+    modelSelectionScore(svmC,regreAttributes," - 4 classes",4)
+    modelSelectionScore(svmC,regreAttributes," - 3 classes",3)
+    modelSelectionScore(svmC,regreAttributes," - 2 classes",2)
 
-    modelSelectionScore(forClass," - 4 classes",4)
-    modelSelectionScore(forClass, " - 3 classes", 3)
-    modelSelectionScore(forClass, " - 2 classes", 2)
+    # Decision Tree Classifier
+    modelSelectionScore(decClass,attributes," - 4 classes",4)
+    modelSelectionScore(decClass,attributes, " - 3 classes", 3)
+    modelSelectionScore(decClass,attributes, " - 2 classes", 2)
+
+    # Random Forest Classifier
+    modelSelectionScore(forClass,attributes," - 4 classes",4)
+    modelSelectionScore(forClass,attributes, " - 3 classes", 3)
+    modelSelectionScore(forClass,attributes, " - 2 classes", 2)
 
     print("Finished Model Selection - Time elapsed {:.2f}".format(time.time() - start))
 
@@ -710,25 +727,28 @@ def modelSelection():
 # -> compare logistic regression and random forest
 # -> fine tune
 
-
 def hypertuning(modelA, modelB):
+    '''
+    Tunes model A with grid search and model B with bayesian optimisation
+    :param modelA: boolean for running model A - primarily for testing
+    :param modelB: boolean for running model B - primarily for testing
+    :return: Outputs the final metrics for evaluating the two models
+    '''
     #####################---Fine Tune---#####################
     print("\n\nHyper Parameter Tuning:")
 
-    # perform a grid search for the logistic regression,
-    # by comparing performance of each combination for the following parameters
-    # therefore checks 27 combinations of results
-    # uses the cross validation steps used earlier with 10 folds
     if modelA:
-        # tol best performs at default
+        # perform a grid search for the logistic regression,
+        # by comparing performance of each combination for the following parameters
+        # therefore checks 6 * 5 = 30 combinations of results
+        # uses the cross validation steps used earlier with 5 folds
         param_grid = [
-            {"C": [1100, 1000,900,1050, 1090], "tol": [0.00015, 0.0003, 0.0001, 0.00013, 0.00018]},
-            {"C": [800,850,875,900,925,950], "tol": [0.00015, 0.00014, 0.00016]}
+            {"C": range(850,1025,25), "tol": [0.00015, 0.0001,0.00014, 0.00016, 0.0002]},
         ]
 
         LogGridSearch = model_selection.GridSearchCV(logRegr, param_grid, cv=5, return_train_score=True, n_jobs=-1,
                                                      verbose=False)
-        logSearch = LogGridSearch.fit(train[attributes], train["final_result"])
+        logSearch = LogGridSearch.fit(train[regreAttributes], train["final_result"])
 
         # the best parameters found are stored in best params
         print("The Logistic Regression Model produced a mean best score of {:5.3f}% in Hyper Tuning".format(
@@ -738,64 +758,75 @@ def hypertuning(modelA, modelB):
 
     if modelB:
 
-
         def objectiveA(params):
+            '''
+            objective function for all features
+            :param params: Random Forest Parameters for the current iteration
+            :return: Dictionary containing, the loss, the params which produced the loss & a status
+            '''
 
             forClass.set_params(**params)
             results = model_selection.cross_validate(forClass, train[attributes], train["final_result"], cv=5,
                                                       n_jobs=-1, scoring=["accuracy","f1_weighted",
-                                                                          "balanced_accuracy","precision_weighted"])
+                                                                          "balanced_accuracy"])
 
-
-            loss = 4-results["test_accuracy"].mean() - results["test_f1_weighted"].mean() - \
-            results["test_balanced_accuracy"].mean() - results["test_precision_weighted"].mean()
+            loss = 3-results["test_accuracy"].mean() - results["test_f1_weighted"].mean() - \
+            results["test_balanced_accuracy"].mean()
 
             return {"loss":loss, 'params': params, 'status': hyperopt.STATUS_OK}
         def objectiveB(params):
+            '''
+            objective function for only important features
+            :param params: Random Forest Parameters for the current iteration
+            :return: Dictionary containing, the loss, the params which produced the loss & a status
+            '''
 
             forClass.set_params(**params)
             results = model_selection.cross_validate(forClass, train[importantFeatures], train["final_result"], cv=5,
                                                       n_jobs=-1, scoring=["accuracy","f1_weighted",
-                                                                          "balanced_accuracy","precision_weighted"])
+                                                                          "balanced_accuracy"])
 
-
-            loss = 4-results["test_accuracy"].mean() - results["test_f1_weighted"].mean() - \
-            results["test_balanced_accuracy"].mean() - results["test_precision_weighted"].mean()
+            loss = 3-results["test_accuracy"].mean() - results["test_f1_weighted"].mean() - \
+            results["test_balanced_accuracy"].mean()
             return {"loss":loss, 'params': params, 'status': hyperopt.STATUS_OK}
 
-        max_evals = 1
+        # Iterations of hypertuning
+        max_evals = 1000
 
-
-
+        # search space for the hyperparameter optimisation search problem
         param_space = {"n_estimators":hyperopt.hp.choice("n_estimators", np.arange(1, 1000, dtype=int)),
                         "max_depth": hyperopt.hp.choice("max_depth",np.arange(1, 320, dtype=int)),
                         "min_samples_leaf": hyperopt.hp.choice("min_samples_leaf",np.arange(1, 320, dtype=int)),
                         "min_samples_split": hyperopt.hp.choice("min_samples_split",np.arange(2, 100, dtype=int)),
                         "class_weight":hyperopt.hp.choice("class_weight",[
-                            None,"balanced",{0:hyperopt.hp.uniform("0",0,10),1:hyperopt.hp.uniform("1",0,10), 2:
+                            None,{0:hyperopt.hp.uniform("0",0,10),1:hyperopt.hp.uniform("1",0,10), 2:
                                              hyperopt.hp.uniform("2",0,10), 3:hyperopt.hp.uniform("3",0,10)}
+                            # removed balanced in order for hyperopt to optimise the numerical weighting
                          ])
                         }
 
+        # trials - hyperopt object storing information about each iterations
+        # like the dictionary returned from the objective function
         trials = hyperopt.Trials()
-        best = hyperopt.fmin(fn=objectiveA,space=param_space,algo=hyperopt.tpe.suggest, max_evals=max_evals,
+        # minimisation function - returns the best parameters found
+        best = hyperopt.fmin(fn=objectiveA,space=param_space,algo=hyperopt.tpe.suggest, max_evals=int(max_evals*4/5),
                              trials=trials)
         print(trials.best_trial)
-
+        # converts from array indices to
         best = hyperopt.space_eval(param_space,best)
         forClass.set_params(**best)
 
         forClass.fit(train[attributes],train["final_result"])
 
-        # the best parameters found are stored in best params
-        # print("The Random Forest Classifier Model produced a best score of {:5.3f}% in Hyper Tuning".format(
-        #     (1-trials.best_trial["result"]["loss"]) * 100))
+        print("The Random Forest Classifier Model produced a best loss of {:5.3f}% in Hyper Tuning".format(
+            (1-trials.best_trial["result"]["loss"]) * 100))
         print("The parameters which produced this score are {:}".format(best))
         print("Finished modelB hyper parameter tuning round 1 - Time elapsed {:.2f}".format(time.time() - start))
 
-        plt.scatter(range(len(trials)),[1-i["result"]["loss"] for i in trials.trials],alpha=0.2)
+        MM = plt.scatter(range(len(trials)),[3-i["result"]["loss"] for i in trials.trials],alpha=0.2, color='r')
+        Loss = plt.scatter(range(len(trials)), [i["result"]["loss"] for i in trials.trials], alpha=0.2, color='b')
+        plt.legend((MM,Loss),('Summed Accuracy, balanced accuracy & f1 means','Loss'),loc='right')
         plt.xlabel("Iterations")
-        plt.ylabel("Accuracy")
         plt.title("Accuracy against iteration")
         saveFigure("Accuracy_against_iteration1")
 
@@ -804,43 +835,59 @@ def hypertuning(modelA, modelB):
         print("Removing unimportant features and tuning again")
         # Get numerical feature importance
         importances = list(forClass.feature_importances_)
-        # List of tuples with variable and importance
         feature_importances = [(feature, round(importance, 5)) for feature, importance in zip(attributes, importances)]
         feature_importances = sorted(feature_importances, key=lambda x: x[1], reverse=True)
 
         [print('Variable: {:35} Importance: {}'.format(*pair)) for pair in feature_importances]
 
-        # List of features sorted from most to least important
         sorted_importances = [importance[1] for importance in feature_importances]
         sorted_features = [importance[0] for importance in feature_importances]
-        # Cumulative importances
         cumulative_importances = np.cumsum(sorted_importances)
         plt.plot(list(range(len(importances))), cumulative_importances)
         # add the x labels
         plt.xticks(list(range(len(importances))), sorted_features, rotation='vertical')
         # plot horizontal line across importance cut off point
         plt.hlines(0.95,0,len(importances),lw=1)
-        # Axis labels and title
         plt.xlabel('Feature')
         plt.ylabel('Cumulative Importance')
         plt.title('Cumulative Importances')
         saveFigure("Importances")
 
+        # assigns important features to top 95 % of importance
         sizeFeatures = np.where(cumulative_importances > 0.95)[0][0]
         importantFeatures = sorted_features[:sizeFeatures]
 
+        # trials - hyperopt object storing information about each iterations
+        # like the dictionary returned from the objective function
         trials = hyperopt.Trials()
+        # minimisation function - returns the best parameters found
         best = hyperopt.fmin(fn=objectiveB, space=param_space, algo=hyperopt.tpe.suggest, max_evals=max_evals,
                       trials=trials)
 
+        # plot loss & mean metric against iteration
+        MM = plt.scatter(range(len(trials)),[3-i["result"]["loss"] for i in trials.trials],alpha=0.2, color='r')
+        Loss = plt.scatter(range(len(trials)), [i["result"]["loss"] for i in trials.trials], alpha=0.2, color='b')
+        plt.legend((MM,Loss),('Summed Accuracy, balanced accuracy & f1 means','Loss'),loc='right')
+        plt.xlabel("Iterations")
+        plt.ylabel("Loss & Mean Metric")
+        plt.title("Accuracy against iteration")
+        saveFigure("Accuracy_against_iteration2")
+
+        # plot estimators against iteration
+        plt.scatter(range(len(trials)),[i["result"]["params"]['n_estimators'] for i in trials.trials],alpha=0.2)
+        plt.xlabel("Iterations")
+        plt.ylabel("N_Estimators")
+        plt.title("Estimators against iteration")
+        saveFigure("Estimators_against_iteration")
+
+        # convert from domain to specific values
         best = hyperopt.space_eval(param_space,best)
         forClass.set_params(**best)
 
         forClass.fit(train[importantFeatures], train["final_result"])
 
-        # the best parameters found are stored in best params
-        # print("The Random Forest Classifier Model produced a best score of {:5.3f}% in Hyper Tuning".format(
-        #     (1 - trials.best_trial["result"]["loss"]) * 100))
+        print("The Random Forest Classifier Model produced a best loss of {:5.3f}% in Hyper Tuning".format(
+            (1 - trials.best_trial["result"]["loss"]) * 100))
         print("The parameters which produced this score are {:}".format(best))
         print("Finished modelB hyper parameter tuning round 2 - Time elapsed {:.2f}".format(time.time() - start))
 
@@ -852,63 +899,31 @@ def hypertuning(modelA, modelB):
         logisticModel = logSearch.best_estimator_
 
         # make the prediction
-        logisticPrediction = logisticModel.predict(test_final[attributes])
+        logisticPrediction = logisticModel.predict(test_final[regreAttributes])
 
         # scoring tuple
         truePredTuple = (test_final["final_result"], logisticPrediction)
 
         # output all the scorings for the logistic regression model
-        print("\n\nFinal Logistic Regression Model:")
-        print("Max Error: %.3f" % metrics.max_error(truePredTuple[0], truePredTuple[1]))
-        print("Explained Varience Score: %.3f" % metrics.explained_variance_score(truePredTuple[0], truePredTuple[1]))
-        print("Mean Absolute Error: %.3f" % metrics.mean_absolute_error(truePredTuple[0], truePredTuple[1]))
-        print("Mean Square Error: %.3f" % metrics.mean_squared_error(truePredTuple[0], truePredTuple[1]))
-        print("Root Mean Square Error: %.3f" % metrics.mean_squared_error(truePredTuple[0], truePredTuple[1],
-                                                                          squared=False))
-        print("Median Absolute Error: %.3f" % metrics.median_absolute_error(truePredTuple[0], truePredTuple[1]))
-        print("r2 Score (Accuracy): %.3f" % metrics.r2_score(truePredTuple[0], truePredTuple[1]))
-        print("Accuracy Score: %.3f" % metrics.accuracy_score(truePredTuple[0], truePredTuple[1]))
-        category2String = {0: "Withdrawn", 1: "Fail", 2: "Pass", 3: "Distinction"}
+        print("\n\nFinal Logistic Regression Model - 4 Class:")
+        finalMetrics(truePredTuple)
 
-        print(metrics.classification_report([category2String[i] for i in truePredTuple[0]],
-                                            [category2String[i] for i in truePredTuple[1]], digits=3))
-        category2String = ["Withdrawn", "Fail", "Pass", "Distinction"]
-        print(pandas.DataFrame(metrics.confusion_matrix(truePredTuple[0], truePredTuple[1]), index=category2String,
-                               columns=category2String))
-
-        # run the final analysis
-        # use the model found from hyper tuning
+        # Evaluation of 2 class version of model using parameters found from tuning
         logisticModel = logSearch.best_estimator_
         logisticModel.fit(test_final[attributes],test_final["final_result2"])
         # make the prediction
-        logisticPrediction = logisticModel.predict(test_final[attributes])
+        logisticPrediction = logisticModel.predict(test_final[regreAttributes])
 
         # scoring tuple
         truePredTuple = (test_final["final_result2"], logisticPrediction)
 
         # output all the scorings for the logistic regression model
-        print("\n\nFinal Logistic Regression Model:")
-        print("Max Error: %.3f" % metrics.max_error(truePredTuple[0], truePredTuple[1]))
-        print("Explained Varience Score: %.3f" % metrics.explained_variance_score(truePredTuple[0], truePredTuple[1]))
-        print("Mean Absolute Error: %.3f" % metrics.mean_absolute_error(truePredTuple[0], truePredTuple[1]))
-        print("Mean Square Error: %.3f" % metrics.mean_squared_error(truePredTuple[0], truePredTuple[1]))
-        print("Root Mean Square Error: %.3f" % metrics.mean_squared_error(truePredTuple[0], truePredTuple[1],
-                                                                          squared=False))
-        print("Median Absolute Error: %.3f" % metrics.median_absolute_error(truePredTuple[0], truePredTuple[1]))
-        print("r2 Score (Accuracy): %.3f" % metrics.r2_score(truePredTuple[0], truePredTuple[1]))
-        print("Accuracy Score: %.3f" % metrics.accuracy_score(truePredTuple[0], truePredTuple[1]))
-        category2String = {1: "Fail", 2: "Pass"}
-
-        print(metrics.classification_report([category2String[i] for i in truePredTuple[0]],
-                                            [category2String[i] for i in truePredTuple[1]], digits=3))
-        category2String = ["Fail", "Pass"]
-        print(pandas.DataFrame(metrics.confusion_matrix(truePredTuple[0], truePredTuple[1]), index=category2String,
-                               columns=category2String))
+        print("\n\nFinal Logistic Regression Model - 2 Class:")
+        finalMetrics(truePredTuple)
 
     if modelB:
         # use the model found from hyper tuning
         randomForestModel = forClass
-
 
         # make prediction
         randomForestPrediction = randomForestModel.predict(test_final[importantFeatures])
@@ -916,28 +931,15 @@ def hypertuning(modelA, modelB):
         # scoring tuple
         truePredTuple = (test_final["final_result"], randomForestPrediction)
 
-        # output all the scorings for the random forest regression model
-        print("\n\nFinal Random Forest Classifier Model:")
-        print("Explained Varience Score: %.3f" % metrics.explained_variance_score(truePredTuple[0], truePredTuple[1]))
-        print("Mean Absolute Error: %.3f" % metrics.mean_absolute_error(truePredTuple[0], truePredTuple[1]))
-        print("Mean Square Error: %.3f" % metrics.mean_squared_error(truePredTuple[0], truePredTuple[1]))
-        print("Root Mean Square Error: %.3f" % metrics.mean_squared_error(truePredTuple[0], truePredTuple[1],
-                                                                          squared=False))
-        print("r2 Score (Accuracy): %.3f" % metrics.r2_score(truePredTuple[0], truePredTuple[1]))
-        print("Accuracy Score: %.3f" % metrics.accuracy_score(truePredTuple[0], truePredTuple[1]))
-        category2String = {0: "Withdrawn", 1: "Fail", 2: "Pass", 3: "Distinction"}
+        # output metrics for the random forest regression model
+        print("\n\nFinal Random Forest Classifier Model - 4 Class:")
+        finalMetrics(truePredTuple)
 
-        print(metrics.classification_report([category2String[i] for i in truePredTuple[0]],
-                                            [category2String[i] for i in truePredTuple[1]], digits=3))
-        category2String = ["Withdrawn","Fail", "Pass", "Distinction"]
-
-        print(pandas.DataFrame(metrics.confusion_matrix(truePredTuple[0], truePredTuple[1]), index=category2String,
-                               columns=category2String))
 
         # 2 class problem
-
-        # use the model found from hyper tuning
+        # Evaluation of 2 class version of model using parameters found from tuning
         randomForestModel = forClass
+        # class weight as 4 dictionary fails for 2 classes - so balanced is used instead
         best["class_weight"] = "balanced"
         randomForestModel.set_params(**best)
 
@@ -950,25 +952,32 @@ def hypertuning(modelA, modelB):
         truePredTuple = (test_final["final_result2"], randomForestPrediction)
 
         # output all the scorings for the random forest regression model
-        print("\n\nFinal Random Forest Classifier Model:")
-        print("Explained Varience Score: %.3f" % metrics.explained_variance_score(truePredTuple[0], truePredTuple[1]))
-        print("Mean Absolute Error: %.3f" % metrics.mean_absolute_error(truePredTuple[0], truePredTuple[1]))
-        print("Mean Square Error: %.3f" % metrics.mean_squared_error(truePredTuple[0], truePredTuple[1]))
-        print("Root Mean Square Error: %.3f" % metrics.mean_squared_error(truePredTuple[0], truePredTuple[1],
-                                                                          squared=False))
-        print("r2 Score (Accuracy): %.3f" % metrics.r2_score(truePredTuple[0], truePredTuple[1]))
-        print("Accuracy Score: %.3f" % metrics.accuracy_score(truePredTuple[0], truePredTuple[1]))
-        category2String = { 1: "Fail", 2: "Pass"}
+        print("\n\nFinal Random Forest Classifier Model - 2 Class:")
+        finalMetrics(truePredTuple)
 
-        print(metrics.classification_report([category2String[i] for i in truePredTuple[0]],
-                                            [category2String[i] for i in truePredTuple[1]], digits=3))
-        category2String = ["Fail", "Pass"]
-
-        print(pandas.DataFrame(metrics.confusion_matrix(truePredTuple[0], truePredTuple[1]), index=category2String,
-                               columns=category2String))
 
     print("Finished - Time elapsed {:.2f}".format(time.time() - start))
 
 
+def finalMetrics(truePredTuple):
+    print("Explained Variance Score: %.3f" % metrics.explained_variance_score(truePredTuple[0], truePredTuple[1]))
+    print("Mean Absolute Error: %.3f" % metrics.mean_absolute_error(truePredTuple[0], truePredTuple[1]))
+    print("Mean Square Error: %.3f" % metrics.mean_squared_error(truePredTuple[0], truePredTuple[1]))
+    print("Root Mean Square Error: %.3f" % metrics.mean_squared_error(truePredTuple[0], truePredTuple[1],
+                                                                      squared=False))
+    print("r2 Score (Accuracy): %.3f" % metrics.r2_score(truePredTuple[0], truePredTuple[1]))
+    print("Accuracy Score: %.3f" % metrics.accuracy_score(truePredTuple[0], truePredTuple[1]))
+    category2String = {0:'Withdrawn',1: "Fail", 2: "Pass",3:'Distinction'}
+
+    print(metrics.classification_report([category2String[i] for i in truePredTuple[0]],
+                                        [category2String[i] for i in truePredTuple[1]], digits=3))
+    if len(truePredTuple[0].unique()) == 2:
+        category2String = ["Fail", "Pass"]
+    else:
+        category2String = ["Withdrawn", "Fail", "Pass", "Distinction"]
+
+    print(pandas.DataFrame(metrics.confusion_matrix(truePredTuple[0], truePredTuple[1]), index=category2String,
+                           columns=category2String))
+
 modelSelection()
-hypertuning(True, True)
+# hypertuning(True, True)
