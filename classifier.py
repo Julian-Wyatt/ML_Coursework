@@ -458,7 +458,9 @@ def dataGather():
     modelData = modelData.merge(formative, how="outer", on=["id_student","code_module", "code_presentation"])
     modelData = modelData.merge(visits, how="outer", on=["id_student"])
 
+    # Fills those without formative scores with 0 rather than the median formative mark
     modelData['formative'] = modelData['formative'].fillna(0)
+
     # scale the summative score based on the number of credits they studied
     # otherwise they had a summative score over 100%
     modelData["summative"] = modelData["summative"] / modelData["studied_credits"]
@@ -472,8 +474,8 @@ def dataGather():
         ["Withdrawn", "Fail", "Pass", "Distinction"], ordered=True)
     # 0, 1, 2, 3
     modelData["final_result"] = modelData["final_result"].cat.codes
-    modelData["final_result2"] = modelData["final_result"].replace({3: 2, 0: 1})
-    modelData["final_result3"] = modelData["final_result"].replace({3: 2})
+    modelData["final-result2"] = modelData["final_result"].replace({3: 2, 0: 1})
+    modelData["final-result3"] = modelData["final_result"].replace({3: 2})
 
     # make gender categorical, then swap the column to only use to codes
     modelData["gender"] = modelData["gender"].astype("category")
@@ -494,7 +496,7 @@ def dataGather():
     modelData["id_student"] = modelData["id_student"].astype("category")
     modelData["code_module"] = modelData["code_module"].astype("category")
     modelData["code_presentation"] = modelData["code_presentation"].astype("category")
-
+    modelData.columns = [x.replace("_","-") for x in np.array(modelData.columns,dtype=str)]
     return modelData
 
 
@@ -509,8 +511,8 @@ def preprocessingFunction(modelData):
     # descriptions of the data gathered
 
     # generate the list of numerical and categorical attributes
-    features = set(list(modelData.columns)).difference({"final_result","final_result2","final_result3","id_student"})
-    num_attributes = features.difference({"region","code_module", "code_presentation"})
+    features = set(list(modelData.columns)).difference({"final-result","final-result2","final-result3","id-student"})
+    num_attributes = features.difference({"region","code-module", "code-presentation"})
     cat_attributes = features.difference(num_attributes)
     num_attributes = list(num_attributes)
     cat_attributes = list(cat_attributes)
@@ -531,19 +533,20 @@ def preprocessingFunction(modelData):
 
     print("Finished data gather - Time elapsed {:.2f}".format(time.time() - start))
     # output the correlations & heatmap
+    modelData.columns = [x.replace("_","-") for x in np.array(modelData.columns,dtype=str)]
     corr = modelData.corr()
-    corr = corr.reindex(corr['final_result'].sort_values()
-                        .reset_index(level=0).iloc[:,0],axis=1).sort_values(by=['final_result'])
+    corr = corr.reindex(corr['final-result'].sort_values()
+                        .reset_index(level=0).iloc[:,0],axis=1).sort_values(by=['final-result'])
     with pandas.option_context('display.max_rows',None,'display.max_columns',None):
-        print(corr["final_result"])
+        print(corr["final-result"])
 
     # produce & save heatmap based on correlations
-    sns.set(font_scale=0.35)
+    sns.set(font_scale=0.32)
     plt.figure()
 
     heatmap = sns.heatmap(corr, cmap="YlOrRd",
-                          xticklabels=corr.columns,
-                          yticklabels=corr.columns,
+                          xticklabels=2,
+                          yticklabels=1,
                           annot=False, cbar_kws={'label': 'Correlation'})
     plt.xlabel('Features')
     figure = heatmap.get_figure()
@@ -562,11 +565,11 @@ train, test_final = model_selection.train_test_split(modelData, random_state=ran
 
 # Define features to use for fitting
 attributes = list(modelData.columns)
-attributes.remove("final_result")
-attributes.remove("final_result2")
-attributes.remove("final_result3")
+attributes.remove("final-result")
+attributes.remove("final-result2")
+attributes.remove("final-result3")
 regreAttributes = attributes.copy()
-regreAttributes.remove('id_student')
+regreAttributes.remove('id-student')
 
 # initialise regression & classification objects
 
@@ -594,11 +597,11 @@ def modelSelectionScore(model,features, Name="", classes=4):
             model.__class__.__name__ + Name))
     scores = None
     if classes == 4:
-        scores = model_selection.cross_val_score(model, train[features], train["final_result"], cv=5, n_jobs=-1)
+        scores = model_selection.cross_val_score(model, train[features], train["final-result"], cv=5, n_jobs=-1)
     elif classes == 3:
-        scores = model_selection.cross_val_score(model, train[features], train["final_result3"], cv=5, n_jobs=-1)
+        scores = model_selection.cross_val_score(model, train[features], train["final-result3"], cv=5, n_jobs=-1)
     elif classes == 2:
-        scores = model_selection.cross_val_score(model, train[features], train["final_result2"], cv=5, n_jobs=-1)
+        scores = model_selection.cross_val_score(model, train[features], train["final-result2"], cv=5, n_jobs=-1)
     else:
         exit()
 
@@ -620,7 +623,7 @@ def plots(model, subtrain, subtest, feature, Name="", logistic=False):
     '''
     print("\n{name} model against {featureName}".format(name=model.__class__.__name__+Name,
                                                         featureName=feature.replace("_", " ")))
-    model.fit(np.array(subtrain[feature]).reshape(-1, 1), np.array(subtrain["final_result2"]).ravel())
+    model.fit(np.array(subtrain[feature]).reshape(-1, 1), np.array(subtrain["final-result2"]).ravel())
 
     # Make predictions using the testing set
     featurePred = model.predict(np.array(subtest[feature]).reshape(-1, 1))
@@ -632,13 +635,13 @@ def plots(model, subtrain, subtest, feature, Name="", logistic=False):
         pass
     # The mean squared error
     print('Mean squared error: %.2f'
-          % metrics.mean_squared_error(subtest['final_result2'], featurePred))
+          % metrics.mean_squared_error(subtest['final-result2'], featurePred))
     # The r2 accuracy
     print('r2 Accuracy Score: %.2f'
-          % metrics.r2_score(subtest["final_result2"], featurePred))
+          % metrics.r2_score(subtest["final-result2"], featurePred))
     # The score
     print('Score: %.2f'
-          % model.score(np.array(subtrain[feature]).reshape(-1, 1), np.array(subtrain["final_result2"]).ravel()))
+          % model.score(np.array(subtrain[feature]).reshape(-1, 1), np.array(subtrain["final-result2"]).ravel()))
     # if not linear plot the probability
     if logistic:
         featurePred = model.predict_proba(np.array(subtest[feature]).reshape(-1, 1))[:, 1] + 1
@@ -647,7 +650,7 @@ def plots(model, subtrain, subtest, feature, Name="", logistic=False):
     plt.plot(subtest[feature].sort_values(), featurePred, color='blue', linewidth=1)
     plotSave("{name} 2 class model against {featureName}".format(
         name=model.__class__.__name__ + Name, featureName=feature.replace("_", " ")),
-        subtest[feature], feature.replace("_", " "), subtest["final_result2"], "final result - 2 class")
+        subtest[feature], feature.replace("_", " "), subtest["final-result2"], "final result - 2 class")
 
 
 
@@ -664,13 +667,13 @@ def modelSelection():
     # Linear Regr plots ##################################################################################
     # graph 4 data points for linear regression to compare
 
-    plots(linRegr, subtrain, subtest, "sum_click")
+    plots(linRegr, subtrain, subtest, "sum-click")
 
     plots(linRegr, subtrain, subtest, "score")
 
-    plots(linRegr, subtrain, subtest, "age_band")
+    plots(linRegr, subtrain, subtest, "age-band")
 
-    plots(linRegr, subtrain, subtest, "imd_band")
+    plots(linRegr, subtrain, subtest, "imd-band")
 
     # Logistic
     modelSelectionScore(logRegr,regreAttributes,Name=" - 4 classes", classes=4)
@@ -685,11 +688,11 @@ def modelSelection():
     # SVR Linear plots ##################################################################################
     # graph 3 data points for svr linear regression to compare
 
-    plots(svrRegr, subtrain, subtest, "sum_click", "-Linear_Kernel")
+    plots(svrRegr, subtrain, subtest, "sum-click", "-Linear-Kernel")
 
-    plots(svrRegr, subtrain, subtest, "score", "-Linear_Kernel")
+    plots(svrRegr, subtrain, subtest, "score", "-Linear-Kernel")
 
-    plots(svrRegr, subtrain, subtest, "imd_band", "-Linear_Kernel")
+    plots(svrRegr, subtrain, subtest, "imd-band", "-Linear-Kernel")
 
     # SVR Poly
     modelSelectionScore(svrPolyRegr,regreAttributes, " - Polynomial Kernel")
@@ -697,11 +700,11 @@ def modelSelection():
     # SVR poly plots ##################################################################################
     # graph 3 data points for svr linear regression to compare
 
-    plots(svrPolyRegr, subtrain, subtest, "sum_click", "-Polynomial_Kernel")
+    plots(svrPolyRegr, subtrain, subtest, "sum-click", "-Polynomial-Kernel")
 
-    plots(svrPolyRegr, subtrain, subtest, "score", "-Polynomial_Kernel")
+    plots(svrPolyRegr, subtrain, subtest, "score", "-Polynomial-Kernel")
 
-    plots(svrPolyRegr, subtrain, subtest, "age_band", "-Polynomial_Kernel")
+    plots(svrPolyRegr, subtrain, subtest, "age-band", "-Polynomial-Kernel")
 
     # SVR RBF (Current Sklearn Default)
     modelSelectionScore(svrRBF,regreAttributes, " - RBF Kernel")
@@ -748,7 +751,7 @@ def hypertuning(modelA, modelB):
 
         LogGridSearch = model_selection.GridSearchCV(logRegr, param_grid, cv=5, return_train_score=True, n_jobs=-1,
                                                      verbose=False)
-        logSearch = LogGridSearch.fit(train[regreAttributes], train["final_result"])
+        logSearch = LogGridSearch.fit(train[regreAttributes], train["final-result"])
 
         # the best parameters found are stored in best params
         print("The Logistic Regression Model produced a mean best score of {:5.3f}% in Hyper Tuning".format(
@@ -766,7 +769,7 @@ def hypertuning(modelA, modelB):
             '''
 
             forClass.set_params(**params)
-            results = model_selection.cross_validate(forClass, train[attributes], train["final_result"], cv=5,
+            results = model_selection.cross_validate(forClass, train[attributes], train["final-result"], cv=5,
                                                       n_jobs=-1, scoring=["accuracy","f1_weighted",
                                                                           "balanced_accuracy"])
 
@@ -782,7 +785,7 @@ def hypertuning(modelA, modelB):
             '''
 
             forClass.set_params(**params)
-            results = model_selection.cross_validate(forClass, train[importantFeatures], train["final_result"], cv=5,
+            results = model_selection.cross_validate(forClass, train[importantFeatures], train["final-result"], cv=5,
                                                       n_jobs=-1, scoring=["accuracy","f1_weighted",
                                                                           "balanced_accuracy"])
 
@@ -816,7 +819,7 @@ def hypertuning(modelA, modelB):
         best = hyperopt.space_eval(param_space,best)
         forClass.set_params(**best)
 
-        forClass.fit(train[attributes],train["final_result"])
+        forClass.fit(train[attributes],train["final-result"])
 
         print("The Random Forest Classifier Model produced a best loss of {:5.3f}% in Hyper Tuning".format(
             (1-trials.best_trial["result"]["loss"]) * 100))
@@ -884,7 +887,7 @@ def hypertuning(modelA, modelB):
         best = hyperopt.space_eval(param_space,best)
         forClass.set_params(**best)
 
-        forClass.fit(train[importantFeatures], train["final_result"])
+        forClass.fit(train[importantFeatures], train["final-result"])
 
         print("The Random Forest Classifier Model produced a best loss of {:5.3f}% in Hyper Tuning".format(
             (1 - trials.best_trial["result"]["loss"]) * 100))
@@ -902,7 +905,7 @@ def hypertuning(modelA, modelB):
         logisticPrediction = logisticModel.predict(test_final[regreAttributes])
 
         # scoring tuple
-        truePredTuple = (test_final["final_result"], logisticPrediction)
+        truePredTuple = (test_final["final-result"], logisticPrediction)
 
         # output all the scorings for the logistic regression model
         print("\n\nFinal Logistic Regression Model - 4 Class:")
@@ -910,12 +913,12 @@ def hypertuning(modelA, modelB):
 
         # Evaluation of 2 class version of model using parameters found from tuning
         logisticModel = logSearch.best_estimator_
-        logisticModel.fit(test_final[attributes],test_final["final_result2"])
+        logisticModel.fit(test_final[attributes],test_final["final-result2"])
         # make the prediction
         logisticPrediction = logisticModel.predict(test_final[regreAttributes])
 
         # scoring tuple
-        truePredTuple = (test_final["final_result2"], logisticPrediction)
+        truePredTuple = (test_final["final-result2"], logisticPrediction)
 
         # output all the scorings for the logistic regression model
         print("\n\nFinal Logistic Regression Model - 2 Class:")
@@ -929,7 +932,7 @@ def hypertuning(modelA, modelB):
         randomForestPrediction = randomForestModel.predict(test_final[importantFeatures])
 
         # scoring tuple
-        truePredTuple = (test_final["final_result"], randomForestPrediction)
+        truePredTuple = (test_final["final-result"], randomForestPrediction)
 
         # output metrics for the random forest regression model
         print("\n\nFinal Random Forest Classifier Model - 4 Class:")
@@ -943,13 +946,13 @@ def hypertuning(modelA, modelB):
         best["class_weight"] = "balanced"
         randomForestModel.set_params(**best)
 
-        randomForestModel.fit(test_final[importantFeatures],test_final["final_result2"])
+        randomForestModel.fit(test_final[importantFeatures],test_final["final-result2"])
 
         # make prediction
         randomForestPrediction = randomForestModel.predict(test_final[importantFeatures])
 
         # scoring tuple
-        truePredTuple = (test_final["final_result2"], randomForestPrediction)
+        truePredTuple = (test_final["final-result2"], randomForestPrediction)
 
         # output all the scorings for the random forest regression model
         print("\n\nFinal Random Forest Classifier Model - 2 Class:")
