@@ -749,8 +749,9 @@ def hypertuning(modelA, modelB):
         # therefore checks 6 * 5 = 30 combinations of results
         # uses the cross validation steps used earlier with 5 folds
         param_grid = [
-            # {"C": range(950,1125,25), "tol": [0.00015, 0.0001,0.00014, 0.00016, 0.0002]},
-            {"C": range(950, 1050, 10), "tol": [0.00015, 0.00014, 0.00016]},
+            # {"C": range(950,1125,25), "penalty": },
+            {"C": np.logspace(-3,3.5,10), "penalty":['l1','l2']},
+            # {"C": [10], "tol": [0.00016]},
         ]
 
         LogGridSearch = model_selection.GridSearchCV(logRegr, param_grid, cv=5, return_train_score=True, n_jobs=-1,
@@ -798,7 +799,7 @@ def hypertuning(modelA, modelB):
             return {"loss":loss, 'params': params, 'status': hyperopt.STATUS_OK,'acc':results["test_accuracy"].mean(),'f1':results["test_f1_weighted"].mean(),'balAcc': results["test_balanced_accuracy"].mean()}
 
         # Iterations of hypertuning
-        max_evals = 2
+        max_evals = 1000
 
         # search space for the hyperparameter optimisation search problem
         param_space = {"n_estimators":hyperopt.hp.choice("n_estimators", np.arange(1, 1000, dtype=int)),
@@ -882,7 +883,7 @@ def hypertuning(modelA, modelB):
         f1 = plt.scatter(range(len(trials)), [i["result"]["f1"] for i in trials.trials], alpha=0.2)
         plt.legend((MM,Loss,Acc,balAcc,f1),('Summed Accuracy, Balanced Accuracy & f1 means','Loss','Mean Accuracy', 'Mean Balanced Accuracy','Mean f1'),loc='right')
         plt.xlabel("Iterations",fontsize=10)
-        plt.title("Metrics against iteration",fontsize=17)
+        # plt.title("Metrics against iteration",fontsize=17)
         saveFigure("Accuracy_against_iteration2")
 
         # plot estimators against iteration
@@ -991,5 +992,5 @@ def finalMetrics(truePredTuple):
     print(pandas.DataFrame(metrics.confusion_matrix(truePredTuple[0], truePredTuple[1]), index=category2String,
                            columns=category2String))
 
-modelSelection()
+# modelSelection()
 hypertuning(True, True)
