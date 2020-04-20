@@ -24,6 +24,8 @@ except ImportError:
 
 try:
     from sklearn import *
+    from sklearn import model_selection
+    from sklearn import utils
 except ImportError:
     install("sklearn")
     from sklearn import *
@@ -598,11 +600,11 @@ def modelSelectionScore(model,features, Name="", classes=4):
             model.__class__.__name__ + Name))
     scores = None
     if classes == 4:
-        scores = model_selection.cross_val_score(model, train[features], train["final-result"], cv=5, n_jobs=-1)
+        scores = model_selection.cross_val_score(model, train[features], train["final-result"], cv=5)
     elif classes == 3:
-        scores = model_selection.cross_val_score(model, train[features], train["final-result3"], cv=5, n_jobs=-1)
+        scores = model_selection.cross_val_score(model, train[features], train["final-result3"], cv=5)
     elif classes == 2:
-        scores = model_selection.cross_val_score(model, train[features], train["final-result2"], cv=5, n_jobs=-1)
+        scores = model_selection.cross_val_score(model, train[features], train["final-result2"], cv=5)
     else:
         exit()
 
@@ -640,7 +642,7 @@ def plots(model, subtrain, subtest, feature, Name="", logistic=False):
     # The r2 accuracy
     print('r2 Accuracy Score: %.2f'
           % metrics.r2_score(subtest["final-result2"], featurePred))
-    # The score
+    # The score - unique to model
     print('Score: %.2f'
           % model.score(np.array(subtrain[feature]).reshape(-1, 1), np.array(subtrain["final-result2"]).ravel()))
     # if not linear plot the probability
@@ -747,7 +749,8 @@ def hypertuning(modelA, modelB):
         # therefore checks 6 * 5 = 30 combinations of results
         # uses the cross validation steps used earlier with 5 folds
         param_grid = [
-            {"C": range(850,1025,25), "tol": [0.00015, 0.0001,0.00014, 0.00016, 0.0002]},
+            # {"C": range(950,1125,25), "tol": [0.00015, 0.0001,0.00014, 0.00016, 0.0002]},
+            {"C": range(950, 1050, 10), "tol": [0.00015, 0.00014, 0.00016]},
         ]
 
         LogGridSearch = model_selection.GridSearchCV(logRegr, param_grid, cv=5, return_train_score=True, n_jobs=-1,
@@ -777,7 +780,7 @@ def hypertuning(modelA, modelB):
             loss = 3-results["test_accuracy"].mean() - results["test_f1_weighted"].mean() - \
             results["test_balanced_accuracy"].mean()
 
-            return {"loss":loss, 'params': params, 'status': hyperopt.STATUS_OK}
+            return {"loss":loss, 'params': params, 'status': hyperopt.STATUS_OK,'acc':results["test_accuracy"].mean(),'f1':results["test_f1_weighted"].mean(),'balAcc': results["test_balanced_accuracy"].mean()}
         def objectiveB(params):
             '''
             objective function for only important features
@@ -792,10 +795,10 @@ def hypertuning(modelA, modelB):
 
             loss = 3-results["test_accuracy"].mean() - results["test_f1_weighted"].mean() - \
             results["test_balanced_accuracy"].mean()
-            return {"loss":loss, 'params': params, 'status': hyperopt.STATUS_OK}
+            return {"loss":loss, 'params': params, 'status': hyperopt.STATUS_OK,'acc':results["test_accuracy"].mean(),'f1':results["test_f1_weighted"].mean(),'balAcc': results["test_balanced_accuracy"].mean()}
 
         # Iterations of hypertuning
-        max_evals = 1000
+        max_evals = 2
 
         # search space for the hyperparameter optimisation search problem
         param_space = {"n_estimators":hyperopt.hp.choice("n_estimators", np.arange(1, 1000, dtype=int)),
@@ -823,15 +826,18 @@ def hypertuning(modelA, modelB):
         forClass.fit(train[attributes],train["final-result"])
 
         print("The Random Forest Classifier Model produced a best loss of {:5.3f}% in Hyper Tuning".format(
-            (1-trials.best_trial["result"]["loss"]) * 100))
+            (trials.best_trial["result"]["loss"]) * 100))
         print("The parameters which produced this score are {:}".format(best))
         print("Finished modelB hyper parameter tuning round 1 - Time elapsed {:.2f}".format(time.time() - start))
 
-        MM = plt.scatter(range(len(trials)),[3-i["result"]["loss"] for i in trials.trials],alpha=0.2, color='r')
-        Loss = plt.scatter(range(len(trials)), [i["result"]["loss"] for i in trials.trials], alpha=0.2, color='b')
-        plt.legend((MM,Loss),('Summed Accuracy, balanced accuracy & f1 means','Loss'),loc='right')
-        plt.xlabel("Iterations")
-        plt.title("Accuracy against iteration")
+        MM = plt.scatter(range(len(trials)),[3-i["result"]["loss"] for i in trials.trials],alpha=0.2)
+        Loss = plt.scatter(range(len(trials)), [i["result"]["loss"] for i in trials.trials], alpha=0.2)
+        Acc = plt.scatter(range(len(trials)), [i["result"]["acc"] for i in trials.trials], alpha=0.2)
+        balAcc = plt.scatter(range(len(trials)), [i["result"]["balAcc"] for i in trials.trials], alpha=0.2)
+        f1 = plt.scatter(range(len(trials)), [i["result"]["f1"] for i in trials.trials], alpha=0.2)
+        plt.legend((MM,Loss,Acc,balAcc,f1),('Summed Accuracy, Balanced Accuracy & f1 means','Loss','Mean Accuracy', 'Mean Balanced Accuracy','Mean f1'),loc='right')
+        plt.xlabel("Iterations",fontsize=10)
+        plt.title("Metrics against iteration",fontsize=17)
         saveFigure("Accuracy_against_iteration1")
 
 
@@ -852,9 +858,9 @@ def hypertuning(modelA, modelB):
         plt.xticks(list(range(len(importances))), sorted_features, rotation='vertical')
         # plot horizontal line across importance cut off point
         plt.hlines(0.95,0,len(importances),lw=1)
-        plt.xlabel('Feature')
-        plt.ylabel('Cumulative Importance')
-        plt.title('Cumulative Importances')
+        plt.xlabel('Feature',fontsize=10)
+        plt.ylabel('Cumulative Importance',fontsize=10)
+        plt.title('Cumulative Importances of features',fontsize=17)
         saveFigure("Importances")
 
         # assigns important features to top 95 % of importance
@@ -871,17 +877,19 @@ def hypertuning(modelA, modelB):
         # plot loss & mean metric against iteration
         MM = plt.scatter(range(len(trials)),[3-i["result"]["loss"] for i in trials.trials],alpha=0.2, color='r')
         Loss = plt.scatter(range(len(trials)), [i["result"]["loss"] for i in trials.trials], alpha=0.2, color='b')
-        plt.legend((MM,Loss),('Summed Accuracy, balanced accuracy & f1 means','Loss'),loc='right')
-        plt.xlabel("Iterations")
-        plt.ylabel("Loss & Mean Metric")
-        plt.title("Accuracy against iteration")
+        Acc = plt.scatter(range(len(trials)), [i["result"]["acc"] for i in trials.trials], alpha=0.2)
+        balAcc = plt.scatter(range(len(trials)), [i["result"]["balAcc"] for i in trials.trials], alpha=0.2)
+        f1 = plt.scatter(range(len(trials)), [i["result"]["f1"] for i in trials.trials], alpha=0.2)
+        plt.legend((MM,Loss,Acc,balAcc,f1),('Summed Accuracy, Balanced Accuracy & f1 means','Loss','Mean Accuracy', 'Mean Balanced Accuracy','Mean f1'),loc='right')
+        plt.xlabel("Iterations",fontsize=10)
+        plt.title("Metrics against iteration",fontsize=17)
         saveFigure("Accuracy_against_iteration2")
 
         # plot estimators against iteration
         plt.scatter(range(len(trials)),[i["result"]["params"]['n_estimators'] for i in trials.trials],alpha=0.2)
-        plt.xlabel("Iterations")
-        plt.ylabel("N_Estimators")
-        plt.title("Estimators against iteration")
+        plt.xlabel("Iterations",fontsize=10)
+        plt.ylabel("N_Estimators",fontsize=10)
+        plt.title("Estimators against iteration",fontsize=17)
         saveFigure("Estimators_against_iteration")
 
         # convert from domain to specific values
@@ -891,7 +899,7 @@ def hypertuning(modelA, modelB):
         forClass.fit(train[importantFeatures], train["final-result"])
 
         print("The Random Forest Classifier Model produced a best loss of {:5.3f}% in Hyper Tuning".format(
-            (1 - trials.best_trial["result"]["loss"]) * 100))
+            (trials.best_trial["result"]["loss"]) * 100))
         print("The parameters which produced this score are {:}".format(best))
         print("Finished modelB hyper parameter tuning round 2 - Time elapsed {:.2f}".format(time.time() - start))
 
@@ -914,7 +922,7 @@ def hypertuning(modelA, modelB):
 
         # Evaluation of 2 class version of model using parameters found from tuning
         logisticModel = logSearch.best_estimator_
-        logisticModel.fit(test_final[attributes],test_final["final-result2"])
+        logisticModel.fit(test_final[regreAttributes],test_final["final-result2"])
         # make the prediction
         logisticPrediction = logisticModel.predict(test_final[regreAttributes])
 
@@ -984,4 +992,4 @@ def finalMetrics(truePredTuple):
                            columns=category2String))
 
 modelSelection()
-# hypertuning(True, True)
+hypertuning(True, True)

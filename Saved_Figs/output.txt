@@ -1,0 +1,482 @@
+             gender  highest_education      imd_band      age_band  num_of_prev_attempts  studied_credits    disability  final_result  sum_click_assessment_var  sum_click_assessment_mean  sum_click_assessment_mad  sum_click_assessment_med  sum_click_assessment_std  sum_click_student_var  sum_click_student_std  sum_click_student_mad  sum_click_student_med  module_presentation_length     daysEarly     is_banked         score    totalScore  daysEarlyAvgScore  daysEarlyMedScore  daysEarlyMadScore  daysEarlyvarScore  daysEarlystdScore  imd_bandAvgScore  imd_bandMedScore  imd_bandMadScore  imd_bandvarScore  imd_bandstdScore  age_bandAvgScore  age_bandMedScore  age_bandMadScore  age_bandvarScore  age_bandstdScore  num_of_prev_attemptsAvgScore  num_of_prev_attemptsMedScore  num_of_prev_attemptsMadScore  num_of_prev_attemptsvarScore  num_of_prev_attemptsstdScore  assessment_Mean  assessment_Meds  assessment_Std  assessment_mad  assessment_var  assessment_type_mean  totalCoursework  \
+count  32593.000000       32593.000000  32593.000000  32593.000000          32593.000000     32593.000000  32593.000000  32593.000000              32593.000000               32593.000000              32593.000000              32593.000000              32593.000000           29566.000000           29566.000000           29741.000000           29741.000000                32593.000000  26746.000000  26746.000000  26727.000000  26746.000000       26746.000000       26746.000000       26746.000000       26642.000000       26642.000000      32593.000000      32593.000000      32593.000000      32593.000000      32593.000000      32593.000000      32593.000000      32593.000000      32593.000000      32593.000000                  32593.000000                  32593.000000                  32593.000000                  32593.000000                  32593.000000     26746.000000     26746.000000    26746.000000    26746.000000    26746.000000          26746.000000     26746.000000
+mean       0.548431           1.739331     47.213818     31.020311              0.163225        79.758691      0.097076      1.253214                 70.813779                   3.592776                  3.173959                  1.671525                  8.030883              57.716947               5.575915               2.807096               1.501446                  256.010125     87.251776      0.132693     72.828037    583.834816          72.825823          74.908113          10.998509         216.704495          14.059922         72.726039         75.556606         11.913135        239.054805         15.432644         72.807932         75.668128         11.953443        240.919703         15.521539                     72.819411                     75.633723                     11.948743                    240.605466                     15.508709        75.199035        79.677456       16.927209       13.648214      323.121094              1.333113         7.751402
+std        0.497657           0.749598     27.679346      9.361840              0.479758        41.071900      0.296066      0.998944                 37.929751                   0.664388                  0.894833                  0.469666                  2.513741             680.925778               5.160138               1.566793               0.563575                   13.179078    275.719130      0.796517     15.564681    376.958359           5.646279           5.441704           3.520554         113.874663           4.361629          2.148938          2.134619          0.658614         29.054453          0.942509          1.156385          1.295573          0.034330          1.193929          0.039032                      1.346270                      1.501923                      0.252893                     10.070401                      0.292231         5.003456         5.421224        4.219317        4.200017      228.344986              0.543481         4.541510
+min        0.000000           0.000000      5.000000     25.000000              0.000000        30.000000      0.000000      0.000000                 12.278953                   2.494215                  1.798438                  1.000000                  3.504134               0.000000               0.000000               0.000000               1.000000                  234.000000  -1469.000000      0.000000      0.000000      0.000000          39.363636          39.363636           0.000000           0.000000           0.000000         69.060803         71.533333         10.854732        192.035840         13.857700         72.067806         74.833333         11.591508        226.510506         15.050266                     63.495891                     68.416667                     10.579125                    200.900214                     14.173927        58.866817        60.000000        9.670097        7.657102       93.510774              0.000000         1.000000
+25%        0.000000           1.000000     25.000000     25.000000              0.000000        60.000000      0.000000      0.000000                 29.393977                   3.045825                  2.359543                  1.000000                  5.421621               7.078541               2.660553               1.678127               1.000000                  241.000000    -14.000000      0.000000     64.800000    286.000000          69.158902          71.357143           8.814595         126.150847          11.231687         71.266656         74.444444         11.521635        222.664706         14.921954         72.067806         74.833333         11.928550        240.886727         15.520526                     73.314411                     76.200000                     11.898198                    239.518698                     15.476392        71.215293        75.000000       14.022104       10.933225      200.120940              0.850000         4.000000
+50%        1.000000           2.000000     45.000000     25.000000              0.000000        60.000000      0.000000      1.000000                 83.375263                   3.807435                  3.292447                  2.000000                  9.131006              20.444249               4.521532               2.525997               1.000000                  262.000000      1.000000      0.000000     75.714286    541.000000          71.861973          74.555556          11.768712         223.349290          14.944875         72.876001         75.738636         11.895070        234.097249         15.300237         72.067806         74.833333         11.967085        240.886727         15.520526                     73.314411                     76.200000                     11.898198                    239.518698                     15.476392        76.560169        79.666667       15.811751       12.466006      256.159216              1.200000         7.000000
+75%        1.000000           2.000000     75.000000     45.000000              0.000000       120.000000      0.000000      2.000000                 98.186051                   4.311302                  3.871849                  2.000000                  9.908887              54.401579               7.375743               3.675684               2.000000                  268.000000    120.000000      0.000000     84.055060    867.000000          76.304708          77.916667          13.495404         305.168802          17.469081         73.744595         76.428571         12.449377        267.226274         16.347057         74.516098         77.612500         11.967085        241.329856         15.534795                     73.314411                     76.200000                     11.898198                    239.518698                     15.476392        78.982208        83.909091       19.340318       15.725523      383.131118              2.000000        11.000000
+max        1.000000           4.000000     95.000000     60.000000              6.000000       655.000000      1.000000      3.000000                126.934215                   4.457342                  4.324998                  2.000000                 11.266509           95762.235145             309.454738              30.413223               9.000000                  269.000000   2367.000000     12.000000    100.000000   2718.000000          98.222222          98.222222          24.333714         968.000000          31.112698         77.351178         80.333333         12.924076        283.293689         16.831331         76.827885         79.428571         11.967085        241.329856         15.534795                     73.314411                     76.200000                     14.740222                    379.230869                     19.473851        93.833017       100.000000       48.639460       47.835640     2365.797046              2.000000        28.000000
+
+       student_Meds   student_Std   student_mad   student_var  stu_type_mean     summative    formative     sum_click  summativeAgainstCredits  final_result2  final_result3
+count  26727.000000  24595.000000  26727.000000  24595.000000   26746.000000  25843.000000  8857.000000  29741.000000             25843.000000   32593.000000   32593.000000
+mean      73.759214     13.771617      9.705295    247.877563       1.333113      0.917660    74.937339   1620.864665                61.161099       1.472034       1.160433
+std       16.038393      7.630366      6.232023    286.348050       0.543481      0.881886    25.220599   2050.309532                47.845171       0.499225       0.870585
+min        0.000000      0.000000      0.000000      0.000000       0.000000      0.000000     0.000000      1.000000                 0.000000       1.000000       0.000000
+25%       65.000000      8.234076      5.360000     67.800000       0.850000      0.203417    71.000000    324.000000                16.135000       1.000000       0.000000
+50%       77.000000     12.659694      9.123967    160.267857       1.200000      0.741667    81.000000    903.000000                63.540000       1.000000       1.000000
+75%       85.000000     17.870336     13.333333    319.348901       2.000000      1.333333    89.142857   2171.000000                86.000000       2.000000       2.000000
+max      100.000000     70.003571     49.500000   4900.500000       2.000000      6.666667   100.000000  28615.000000               200.000000       2.000000       2.000000
+Finished data gather - Time elapsed 78.83
+daysEarlystdScore              -0.259014
+daysEarlyMadScore              -0.258201
+daysEarlyvarScore              -0.244835
+studied_credits                -0.176016
+imd_bandvarScore               -0.134978
+imd_bandstdScore               -0.134921
+imd_bandMadScore               -0.129305
+stu_type_mean                  -0.120263
+assessment_type_mean           -0.120263
+student_Std                    -0.116587
+is_banked                      -0.088308
+num_of_prev_attempts           -0.087011
+code_module_CCC                -0.082579
+code_module_DDD                -0.065849
+student_var                    -0.065294
+disability                     -0.063923
+num_of_prev_attemptsMadScore   -0.060089
+sum_click_assessment_var       -0.057830
+age_bandMadScore               -0.054023
+sum_click_assessment_std       -0.053313
+region_North Western Region    -0.041909
+num_of_prev_attemptsstdScore   -0.039711
+num_of_prev_attemptsvarScore   -0.038897
+code_presentation_2014B        -0.032178
+region_London Region           -0.030829
+region_West Midlands Region    -0.030341
+gender                         -0.019145
+region_East Midlands Region    -0.016558
+assessment_Mean                -0.015497
+age_bandstdScore               -0.013719
+age_bandvarScore               -0.013546
+region_Yorkshire Region        -0.012773
+code_presentation_2013B        -0.009811
+code_module_FFF                -0.003638
+code_presentation_2014J        -0.003629
+code_module_BBB                 0.002890
+sum_click_assessment_mad        0.005832
+assessment_var                  0.007170
+region_Wales                    0.008382
+region_East Anglian Region      0.011269
+formative                       0.011514
+region_South West Region        0.011933
+region_North Region             0.015290
+student_mad                     0.017382
+region_South East Region        0.018403
+sum_click_student_var           0.019323
+assessment_Std                  0.023104
+region_Scotland                 0.023516
+region_South Region             0.025372
+assessment_mad                  0.026087
+region_Ireland                  0.028760
+sum_click_assessment_mean       0.034491
+module_presentation_length      0.035659
+assessment_Meds                 0.041398
+code_presentation_2013J         0.042502
+code_module_AAA                 0.053247
+code_module_EEE                 0.058065
+age_bandMedScore                0.068418
+age_band                        0.068551
+age_bandAvgScore                0.068762
+num_of_prev_attemptsAvgScore    0.090244
+num_of_prev_attemptsMedScore    0.090737
+code_module_GGG                 0.111991
+sum_click_assessment_med        0.115551
+imd_band                        0.125086
+sum_click_student_std           0.129078
+daysEarly                       0.133931
+imd_bandMedScore                0.140527
+imd_bandAvgScore                0.141836
+highest_education               0.143466
+sum_click_student_mad           0.176128
+sum_click_student_med           0.183051
+daysEarlyMedScore               0.281527
+student_Meds                    0.308498
+score                           0.317339
+daysEarlyAvgScore               0.323048
+sum_click                       0.376107
+totalCoursework                 0.427175
+summative                       0.467776
+totalScore                      0.478793
+summativeAgainstCredits         0.490646
+final_result2                   0.892931
+final_result3                   0.961078
+final_result                    1.000000
+Name: final_result, dtype: float64
+LinearRegression:
+Accuracy:  [0.5472376  0.53369533 0.53461858 0.55275401 0.55737966]
+Mean Accuracy Across folds:  0.5451370359652792
+Standard Deviation of the Accuracy Across folds:  0.00952746770105756
+
+
+
+LinearRegression model against sum click
+Coefficients:
+ [2.68063562]
+Mean squared error: 0.21
+r2 Accuracy Score: 0.15
+Score: 0.14
+Coefficient of determination: 0.05
+
+LinearRegression model against score
+Coefficients:
+ [1.15102558]
+Mean squared error: 0.22
+r2 Accuracy Score: 0.10
+Score: 0.11
+Coefficient of determination: 0.02
+
+LinearRegression model against age band
+Coefficients:
+ [0.13257428]
+Mean squared error: 0.25
+r2 Accuracy Score: 0.01
+Score: 0.01
+Coefficient of determination: -0.05
+
+LinearRegression model against imd band
+Coefficients:
+ [0.20957908]
+Mean squared error: 0.24
+r2 Accuracy Score: 0.02
+Score: 0.02
+Coefficient of determination: -0.04
+LogisticRegression - 4 classes:
+Accuracy:  [0.68582532 0.67907548 0.68337083 0.69257517 0.69844517]
+Mean Accuracy Across folds:  0.687858394157163
+Standard Deviation of the Accuracy Across folds:  0.006866426656349932
+
+
+LogisticRegression - 3 classes:
+Accuracy:  [0.75864185 0.7453467  0.75373287 0.7563919  0.76391162]
+Mean Accuracy Across folds:  0.7556049871802124
+Standard Deviation of the Accuracy Across folds:  0.006125018594061425
+
+
+LogisticRegression - 2 classes:
+Accuracy:  [0.89486603 0.88566169 0.89077521 0.8977296  0.89607201]
+Mean Accuracy Across folds:  0.8930209070162853
+Standard Deviation of the Accuracy Across folds:  0.0043378960887285965
+
+
+
+LogisticRegression model against score
+Coefficients:
+ [[2.94965491]]
+Mean squared error: 0.28
+r2 Accuracy Score: -0.12
+Score: 0.72
+Coefficient of determination: 0.19
+SVR - Linear Kernel:
+Accuracy:  [0.51497365 0.5039175  0.50858589 0.52327434 0.53968591]
+Mean Accuracy Across folds:  0.5180874585506445
+Standard Deviation of the Accuracy Across folds:  0.012602858474866608
+
+
+
+SVR model against sum click
+Coefficients:
+ [[4.82936742]]
+Mean squared error: 0.25
+r2 Accuracy Score: 0.01
+Score: -0.03
+Coefficient of determination: 0.13
+
+SVR model against score
+Coefficients:
+ [[1.99048211]]
+Mean squared error: 0.24
+r2 Accuracy Score: 0.03
+Score: 0.03
+Coefficient of determination: 0.01
+
+SVR model against imd band
+Coefficients:
+ [[0.90000205]]
+Mean squared error: 0.29
+r2 Accuracy Score: -0.18
+Score: -0.17
+Coefficient of determination: -0.04
+SVR - Polynomial Kernel:
+Accuracy:  [0.73228038 0.71300249 0.72303768 0.73681787 0.73861674]
+Mean Accuracy Across folds:  0.7287510313793376
+Standard Deviation of the Accuracy Across folds:  0.009544856732986634
+
+
+
+SVR model against sum click
+Mean squared error: 0.37
+r2 Accuracy Score: -0.49
+Score: -0.57
+Coefficient of determination: -0.00
+
+SVR model against score
+Mean squared error: 0.46
+r2 Accuracy Score: -0.85
+Score: -0.86
+Coefficient of determination: -0.07
+
+SVR model against age band
+Mean squared error: 0.35
+r2 Accuracy Score: -0.41
+Score: -0.43
+Coefficient of determination: -0.00
+SVR - RBF Kernel:
+Accuracy:  [0.70109938 0.682832   0.6926625  0.70616818 0.7155164 ]
+Mean Accuracy Across folds:  0.699655692927438
+Standard Deviation of the Accuracy Across folds:  0.011207142552742487
+
+
+SVC - 4 classes:
+Accuracy:  [0.65943956 0.66312129 0.67559828 0.67109838 0.68719313]
+Mean Accuracy Across folds:  0.6712901285795059
+Standard Deviation of the Accuracy Across folds:  0.00978435666211636
+
+
+SVC - 3 classes:
+Accuracy:  [0.76682348 0.76130088 0.76866435 0.76620986 0.78273322]
+Mean Accuracy Across folds:  0.7691463584873889
+Standard Deviation of the Accuracy Across folds:  0.007216724780135424
+
+
+SVC - 2 classes:
+Accuracy:  [0.92677439 0.92227449 0.92841072 0.92963796 0.93126023]
+Mean Accuracy Across folds:  0.9276715590193959
+Standard Deviation of the Accuracy Across folds:  0.0030732678303288827
+
+
+DecisionTreeClassifier - 4 classes:
+Accuracy:  [0.67539374 0.66741665 0.67825731 0.6696666  0.68166939]
+Mean Accuracy Across folds:  0.6744807391857
+Standard Deviation of the Accuracy Across folds:  0.00528867003112026
+
+
+DecisionTreeClassifier - 3 classes:
+Accuracy:  [0.75802823 0.74493762 0.76273267 0.75352833 0.76370704]
+Mean Accuracy Across folds:  0.7565867746793882
+Standard Deviation of the Accuracy Across folds:  0.006864472431789823
+
+
+DecisionTreeClassifier - 2 classes:
+Accuracy:  [0.91511557 0.91409286 0.91450194 0.91736551 0.92205401]
+Mean Accuracy Across folds:  0.9166259788917905
+Standard Deviation of the Accuracy Across folds:  0.002940067770519074
+
+
+RandomForestClassifier - 4 classes:
+Accuracy:  [0.75005114 0.73225609 0.74391491 0.75046022 0.75265957]
+Mean Accuracy Across folds:  0.7458683845193074
+Standard Deviation of the Accuracy Across folds:  0.007400153275172461
+
+
+RandomForestClassifier - 3 classes:
+Accuracy:  [0.81427695 0.8009818  0.81243608 0.81182246 0.81526187]
+Mean Accuracy Across folds:  0.8109558298983757
+Standard Deviation of the Accuracy Across folds:  0.005138001862017671
+
+
+RandomForestClassifier - 2 classes:
+Accuracy:  [0.94170587 0.93802414 0.94375128 0.94252403 0.94292144]
+Mean Accuracy Across folds:  0.9417853516645639
+Standard Deviation of the Accuracy Across folds:  0.001992700580709928
+
+
+Finished Model Selection - Time elapsed 7983.88
+
+
+Hyper Parameter Tuning:
+The Logistic Regression Model produced a mean best score of 69.592% in Hyper Tuning
+The parameters which produced this score are {'C': 900, 'tol': 0.00015}
+Finished modelA hyper parameter tuning - Time elapsed 13890.95
+100%|██████████| 800/800 [10:43:49<00:00, 48.29s/trial, best loss: 0.834776440952887]
+{'state': 2, 'tid': 746, 'spec': None, 'result': {'loss': 0.834776440952887, 'params': {'class_weight': None, 'max_depth': 101, 'min_samples_leaf': 1, 'min_samples_split': 12, 'n_estimators': 1068}, 'status': 'ok'}, 'misc': {'tid': 746, 'cmd': ('domain_attachment', 'FMinIter_Domain'), 'workdir': None, 'idxs': {'0': [], '1': [], '2': [], '3': [], 'class_weight': [746], 'max_depth': [746], 'min_samples_leaf': [746], 'min_samples_split': [746], 'n_estimators': [746]}, 'vals': {'0': [], '1': [], '2': [], '3': [], 'class_weight': [0], 'max_depth': [100], 'min_samples_leaf': [0], 'min_samples_split': [10], 'n_estimators': [1067]}}, 'exp_key': None, 'owner': None, 'version': 0, 'book_time': datetime.datetime(2020, 4, 18, 20, 7, 22, 876000), 'refresh_time': datetime.datetime(2020, 4, 18, 20, 9, 5, 423000)}
+The parameters which produced this score are {'class_weight': None, 'max_depth': 101, 'min_samples_leaf': 1, 'min_samples_split': 12, 'n_estimators': 1068}
+Finished modelB hyper parameter tuning round 1 - Time elapsed 43018.17
+Removing unimportant features and tuning again
+Variable: summativeAgainstCredits             Importance: 0.13786
+Variable: summative                           Importance: 0.09504
+Variable: totalScore                          Importance: 0.06517
+Variable: score                               Importance: 0.04432
+Variable: totalCoursework                     Importance: 0.04247
+Variable: student_Meds                        Importance: 0.03634
+Variable: sum_click                           Importance: 0.03629
+Variable: student_var                         Importance: 0.02421
+Variable: student_Std                         Importance: 0.02304
+Variable: student_mad                         Importance: 0.02274
+Variable: daysEarlyAvgScore                   Importance: 0.02207
+Variable: assessment_Mean                     Importance: 0.01899
+Variable: assessment_mad                      Importance: 0.01834
+Variable: daysEarly                           Importance: 0.01819
+Variable: stu_type_mean                       Importance: 0.01789
+Variable: daysEarlyMadScore                   Importance: 0.01788
+Variable: assessment_var                      Importance: 0.01769
+Variable: assessment_Std                      Importance: 0.01694
+Variable: sum_click_student_std               Importance: 0.01693
+Variable: assessment_Meds                     Importance: 0.01683
+Variable: sum_click_student_mad               Importance: 0.01674
+Variable: sum_click_student_var               Importance: 0.01653
+Variable: daysEarlyMedScore                   Importance: 0.0165
+Variable: assessment_type_mean                Importance: 0.01637
+Variable: daysEarlystdScore                   Importance: 0.01631
+Variable: daysEarlyvarScore                   Importance: 0.01575
+Variable: studied_credits                     Importance: 0.01195
+Variable: sum_click_assessment_mad            Importance: 0.01063
+Variable: sum_click_assessment_mean           Importance: 0.0097
+Variable: sum_click_assessment_std            Importance: 0.00948
+Variable: sum_click_assessment_var            Importance: 0.00921
+Variable: formative                           Importance: 0.00895
+Variable: sum_click_assessment_med            Importance: 0.00822
+Variable: imd_bandMadScore                    Importance: 0.00611
+Variable: imd_bandstdScore                    Importance: 0.00597
+Variable: imd_band                            Importance: 0.00596
+Variable: imd_bandAvgScore                    Importance: 0.00593
+Variable: imd_bandvarScore                    Importance: 0.00593
+Variable: imd_bandMedScore                    Importance: 0.00587
+Variable: is_banked                           Importance: 0.0053
+Variable: code_module_GGG                     Importance: 0.0053
+Variable: module_presentation_length          Importance: 0.00489
+Variable: code_module_CCC                     Importance: 0.00485
+Variable: highest_education                   Importance: 0.00461
+Variable: region_Scotland                     Importance: 0.00349
+Variable: region_Wales                        Importance: 0.00318
+Variable: sum_click_student_med               Importance: 0.003
+Variable: code_presentation_2014J             Importance: 0.00247
+Variable: gender                              Importance: 0.00243
+Variable: code_module_EEE                     Importance: 0.00238
+Variable: code_module_FFF                     Importance: 0.0022
+Variable: code_module_BBB                     Importance: 0.00211
+Variable: num_of_prev_attempts                Importance: 0.00184
+Variable: num_of_prev_attemptsAvgScore        Importance: 0.0018
+Variable: region_North Western Region         Importance: 0.0018
+Variable: disability                          Importance: 0.00178
+Variable: num_of_prev_attemptsMedScore        Importance: 0.00174
+Variable: num_of_prev_attemptsMadScore        Importance: 0.00172
+Variable: region_East Anglian Region          Importance: 0.00171
+Variable: region_London Region                Importance: 0.0017
+Variable: code_module_DDD                     Importance: 0.00169
+Variable: num_of_prev_attemptsstdScore        Importance: 0.00167
+Variable: num_of_prev_attemptsvarScore        Importance: 0.0016
+Variable: region_West Midlands Region         Importance: 0.00155
+Variable: region_East Midlands Region         Importance: 0.00149
+Variable: region_South West Region            Importance: 0.00148
+Variable: region_South East Region            Importance: 0.00147
+Variable: code_presentation_2014B             Importance: 0.00146
+Variable: region_South Region                 Importance: 0.00144
+Variable: code_presentation_2013J             Importance: 0.00138
+Variable: region_Yorkshire Region             Importance: 0.00137
+Variable: region_Ireland                      Importance: 0.00131
+Variable: age_band                            Importance: 0.00125
+Variable: code_presentation_2013B             Importance: 0.00125
+Variable: age_bandstdScore                    Importance: 0.00123
+Variable: age_bandAvgScore                    Importance: 0.00122
+Variable: age_bandvarScore                    Importance: 0.00121
+Variable: age_bandMedScore                    Importance: 0.00119
+Variable: age_bandMadScore                    Importance: 0.00119
+Variable: region_North Region                 Importance: 0.00109
+Variable: code_module_AAA                     Importance: 0.00082
+100%|██████████| 1000/1000 [11:55:57<00:00, 42.96s/trial, best loss: 0.8052601663964003]
+The parameters which produced this score are {'class_weight': {0: 8.914762172700874, 1: 8.30378277944787, 2: 3.2286530565965488, 3: 9.875677541093014}, 'max_depth': 258, 'min_samples_leaf': 2, 'min_samples_split': 24, 'n_estimators': 579}
+Finished modelB hyper parameter tuning round 2 - Time elapsed 86032.50
+
+
+
+Final Logistic Regression Model:
+Max Error: 3.000
+Explained Varience Score: 0.593
+Mean Absolute Error: 0.339
+Mean Square Error: 0.413
+Root Mean Square Error: 0.643
+Median Absolute Error: 0.000
+r2 Score (Accuracy): 0.591
+Accuracy Score: 0.698
+              precision    recall  f1-score   support
+
+ Distinction      0.690     0.497     0.578       783
+        Fail      0.535     0.345     0.419      1701
+        Pass      0.748     0.857     0.799      3121
+   Withdrawn      0.699     0.801     0.747      2544
+
+    accuracy                          0.698      8149
+   macro avg      0.668     0.625     0.636      8149
+weighted avg      0.683     0.698     0.682      8149
+
+             Withdrawn  Fail  Pass  Distinction
+Withdrawn         2037   367   138            2
+Fail               733   586   381            1
+Pass               139   135  2675          172
+Distinction          4     7   383          389
+
+
+Final Logistic Regression Model:
+Max Error: 1.000
+Explained Varience Score: 0.623
+Mean Absolute Error: 0.094
+Mean Square Error: 0.094
+Root Mean Square Error: 0.307
+Median Absolute Error: 0.000
+r2 Score (Accuracy): 0.622
+Accuracy Score: 0.906
+              precision    recall  f1-score   support
+
+        Fail      0.920     0.897     0.908      4245
+        Pass      0.891     0.916     0.903      3904
+
+    accuracy                          0.906      8149
+   macro avg      0.906     0.906     0.906      8149
+weighted avg      0.906     0.906     0.906      8149
+
+      Fail  Pass
+Fail  3806   439
+Pass   329  3575
+
+
+Final Random Forest Classifier Model:
+Explained Varience Score: 0.729
+Mean Absolute Error: 0.263
+Mean Square Error: 0.275
+Root Mean Square Error: 0.524
+r2 Score (Accuracy): 0.728
+Accuracy Score: 0.743
+              precision    recall  f1-score   support
+
+ Distinction      0.620     0.734     0.673       783
+        Fail      0.576     0.437     0.497      1701
+        Pass      0.843     0.816     0.829      3121
+   Withdrawn      0.751     0.859     0.802      2544
+
+    accuracy                          0.743      8149
+   macro avg      0.698     0.712     0.700      8149
+weighted avg      0.737     0.743     0.736      8149
+
+             Withdrawn  Fail  Pass  Distinction
+Withdrawn         2186   338    18            2
+Fail               704   744   250            3
+Pass                19   208  2547          347
+Distinction          0     2   206          575
+
+
+Final Random Forest Classifier Model:
+Explained Variance Score: 0.853
+Mean Absolute Error: 0.037
+Mean Square Error: 0.037
+Root Mean Square Error: 0.193
+r2 Score (Accuracy): 0.850
+Accuracy Score: 0.963
+              precision    recall  f1-score   support
+
+        Fail      0.989     0.939     0.963      4245
+        Pass      0.937     0.988     0.962      3904
+
+    accuracy                          0.963      8149
+   macro avg      0.963     0.964     0.963      8149
+weighted avg      0.964     0.963     0.963      8149
+
+      Fail  Pass
+Fail  3986   259
+Pass    46  3858
+Finished - Time elapsed 86060.37
+
+Process finished with exit code 0
+
+
+Process finished with exit code 0
