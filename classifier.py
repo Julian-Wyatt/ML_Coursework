@@ -76,10 +76,10 @@ def saveFigure(name):
 
     # stores the figure in the saved figures folder for ease of access and clutter
     if "Saved_Figs" in os.listdir(os.getcwd()):
-        plt.savefig(os.path.join(path, "Saved_Figs", name + ".png"), format="png", dpi=400, bbox_inches='tight')
+        plt.savefig(os.path.join(path, "Saved_Figs", (name.replace(" ","_")) + ".png"), format="png", dpi=400, bbox_inches='tight')
     # however, if the file does not exist - it outputs to cwd
     else:
-        plt.savefig(os.path.join(path, name + ".png"), format="png", dpi=400, bbox_inches='tight')
+        plt.savefig(os.path.join(path, (name.replace(" ","_")) + ".png"), format="png", dpi=400, bbox_inches='tight')
     plt.clf()
     plt.cla()
     plt.close()
@@ -97,9 +97,9 @@ def plotSave(name, dataX, nameX, dataY, nameY):
     """
 
     plt.scatter(dataX, dataY, color='r', alpha=0.1)
-    plt.xlabel(nameX)
-    plt.ylabel(nameY)
-    plt.title(name)
+    plt.xlabel(nameX,fontsize=10)
+    plt.ylabel(nameY,fontsize=10)
+    plt.title(name,fontsize=17)
     saveFigure(name)
 
 # sets pandas output to display all columns
@@ -548,7 +548,8 @@ def preprocessingFunction(modelData):
                           xticklabels=2,
                           yticklabels=1,
                           annot=False, cbar_kws={'label': 'Correlation'})
-    plt.xlabel('Features')
+    plt.xlabel('Features',fontsize=10)
+    plt.title('Correlation Heatmap', fontsize=17)
     figure = heatmap.get_figure()
     saveFigure("heatmap")
 
