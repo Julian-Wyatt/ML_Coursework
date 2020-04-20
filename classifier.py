@@ -101,7 +101,7 @@ def plotSave(name, dataX, nameX, dataY, nameY):
     plt.scatter(dataX, dataY, color='r', alpha=0.1)
     plt.xlabel(nameX,fontsize=10)
     plt.ylabel(nameY,fontsize=10)
-    plt.title(name,fontsize=17)
+    # plt.title(name,fontsize=17)
     saveFigure(name)
 
 # sets pandas output to display all columns
@@ -837,7 +837,7 @@ def hypertuning(modelA, modelB):
         f1 = plt.scatter(range(len(trials)), [i["result"]["f1"] for i in trials.trials], alpha=0.2)
         plt.legend((MM,Loss,Acc,balAcc,f1),('Summed Accuracy, Balanced Accuracy & f1 means','Loss','Mean Accuracy', 'Mean Balanced Accuracy','Mean f1'),loc='right')
         plt.xlabel("Iterations",fontsize=10)
-        plt.title("Metrics against iteration",fontsize=17)
+        # plt.title("Metrics against iteration",fontsize=17)
         saveFigure("Accuracy_against_iteration1")
 
 
@@ -860,7 +860,7 @@ def hypertuning(modelA, modelB):
         plt.hlines(0.95,0,len(importances),lw=1)
         plt.xlabel('Feature',fontsize=10)
         plt.ylabel('Cumulative Importance',fontsize=10)
-        plt.title('Cumulative Importances of features',fontsize=17)
+        # plt.title('Cumulative Importances of features',fontsize=17)
         saveFigure("Importances")
 
         # assigns important features to top 95 % of importance
@@ -889,7 +889,7 @@ def hypertuning(modelA, modelB):
         plt.scatter(range(len(trials)),[i["result"]["params"]['n_estimators'] for i in trials.trials],alpha=0.2)
         plt.xlabel("Iterations",fontsize=10)
         plt.ylabel("N_Estimators",fontsize=10)
-        plt.title("Estimators against iteration",fontsize=17)
+        # plt.title("Estimators against iteration",fontsize=17)
         saveFigure("Estimators_against_iteration")
 
         # convert from domain to specific values

@@ -265,19 +265,19 @@ INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/jknappen/ec/ecbx1440.tfm
 INPUT /Users/jules/Documents/Year 2/Software Methodologies/ML/ML Coursework/tex/../Saved_Figs/dataset.png
 INPUT ../Saved_Figs/dataset.png
 INPUT ../Saved_Figs/dataset.png
-INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/jknappen/ec/ecbx1095.tfm
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/public/cm/cmmi10.tfm
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm
 INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT /usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map
+INPUT /usr/local/texlive/2018/texmf-dist/fonts/tfm/jknappen/ec/ecbx1095.tfm
 INPUT /Users/jules/Documents/Year 2/Software Methodologies/ML/ML Coursework/tex/../Saved_Figs/LinearRegression_2_class_model_against_score.png
 INPUT ../Saved_Figs/LinearRegression_2_class_model_against_score.png
 INPUT ../Saved_Figs/LinearRegression_2_class_model_against_score.png
-INPUT /Users/jules/Documents/Year 2/Software Methodologies/ML/ML Coursework/tex/../Saved_Figs/LinearRegression_2_class_model_against_age_band.png
-INPUT ../Saved_Figs/LinearRegression_2_class_model_against_age_band.png
-INPUT ../Saved_Figs/LinearRegression_2_class_model_against_age_band.png
+INPUT /Users/jules/Documents/Year 2/Software Methodologies/ML/ML Coursework/tex/../Saved_Figs/LinearRegression_2_class_model_against_age-band.png
+INPUT ../Saved_Figs/LinearRegression_2_class_model_against_age-band.png
+INPUT ../Saved_Figs/LinearRegression_2_class_model_against_age-band.png
 INPUT /Users/jules/Documents/Year 2/Software Methodologies/ML/ML Coursework/tex/../Saved_Figs/LogisticRegression_2_class_model_against_score.png
 INPUT ../Saved_Figs/LogisticRegression_2_class_model_against_score.png
 INPUT ../Saved_Figs/LogisticRegression_2_class_model_against_score.png
@@ -290,9 +290,9 @@ INPUT ../Saved_Figs/Importances.png
 INPUT /Users/jules/Documents/Year 2/Software Methodologies/ML/ML Coursework/tex/../Saved_Figs/Accuracy_against_iteration1.png
 INPUT ../Saved_Figs/Accuracy_against_iteration1.png
 INPUT ../Saved_Figs/Accuracy_against_iteration1.png
-INPUT /Users/jules/Documents/Year 2/Software Methodologies/ML/ML Coursework/tex/../Saved_Figs/SVR_2_class_model_against_sum_click-Polynomial_Kernel.png
-INPUT ../Saved_Figs/SVR_2_class_model_against_sum_click-Polynomial_Kernel.png
-INPUT ../Saved_Figs/SVR_2_class_model_against_sum_click-Polynomial_Kernel.png
+INPUT /Users/jules/Documents/Year 2/Software Methodologies/ML/ML Coursework/tex/../Saved_Figs/SVR-Polynomial-Kernel_2_class_model_against_sum-click.png
+INPUT ../Saved_Figs/SVR-Polynomial-Kernel_2_class_model_against_sum-click.png
+INPUT ../Saved_Figs/SVR-Polynomial-Kernel_2_class_model_against_sum-click.png
 INPUT /Users/jules/Documents/Year 2/Software Methodologies/ML/ML Coursework/tex/../Saved_Figs/Estimators_against_iteration.png
 INPUT ../Saved_Figs/Estimators_against_iteration.png
 INPUT ../Saved_Figs/Estimators_against_iteration.png

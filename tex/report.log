@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.11.23)  19 APR 2020 21:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.11.23)  20 APR 2020 21:11
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -709,11 +709,7 @@ Package: geometry 2018/03/24 v5.7 Page Geometry
 \Gm@layouthoffset=\dimen186
 \Gm@layoutvoffset=\dimen187
 \Gm@dimlist=\toks37
-) (/Users/jules/Documents/Year 2/Software Methodologies/ML/ML Coursework/tex/report.aux
-
-LaTeX Warning: Label `fig:Acc2' multiply defined.
-
-)
+) (/Users/jules/Documents/Year 2/Software Methodologies/ML/ML Coursework/tex/report.aux)
 \openout1 = `report.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 30.
@@ -827,134 +823,135 @@ File: ../Saved_Figs/dataset.png Graphic file (type png)
 <use ../Saved_Figs/dataset.png>
 Package pdftex.def Info: ../Saved_Figs/dataset.png  used on input line 39.
 (pdftex.def)             Requested size: 272.07272pt x 259.7364pt.
-
-
-LaTeX Warning: Reference `table:heatmap' on page 1 undefined on input line 46.
-
-[1{/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+ [1{/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
  <../Saved_Figs/dataset.png>]
 
-LaTeX Warning: Reference `' on page 2 undefined on input line 100.
+Package caption Warning: \label without proper reference on input line 152.
+See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `' on page 2 undefined on input line 100.
+LaTeX Warning: Reference `fig:importances' on page 2 undefined on input line 100.
 
-<../Saved_Figs/LinearRegression_2_class_model_against_score.png, id=45, 396.94298pt x 312.9291pt>
+
+Package caption Warning: \label without proper reference on input line 170.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig:estimators' on page 2 undefined on input line 100.
+
+<../Saved_Figs/LinearRegression_2_class_model_against_score.png, id=47, 400.55647pt x 307.68953pt>
 File: ../Saved_Figs/LinearRegression_2_class_model_against_score.png Graphic file (type png)
 <use ../Saved_Figs/LinearRegression_2_class_model_against_score.png>
-Package pdftex.def Info: ../Saved_Figs/LinearRegression_2_class_model_against_score.png  used on input line 126.
-(pdftex.def)             Requested size: 272.07272pt x 214.48882pt.
+Package pdftex.def Info: ../Saved_Figs/LinearRegression_2_class_model_against_score.png  used on input line 127.
+(pdftex.def)             Requested size: 269.35349pt x 206.91618pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<../Saved_Figs/LinearRegression_2_class_model_against_age_band.png, id=46, 396.94298pt x 312.9291pt>
-File: ../Saved_Figs/LinearRegression_2_class_model_against_age_band.png Graphic file (type png)
-<use ../Saved_Figs/LinearRegression_2_class_model_against_age_band.png>
-Package pdftex.def Info: ../Saved_Figs/LinearRegression_2_class_model_against_age_band.png  used on input line 131.
-(pdftex.def)             Requested size: 272.07272pt x 214.48882pt.
+<../Saved_Figs/LinearRegression_2_class_model_against_age-band.png, id=48, 400.55647pt x 307.68953pt>
+File: ../Saved_Figs/LinearRegression_2_class_model_against_age-band.png Graphic file (type png)
+<use ../Saved_Figs/LinearRegression_2_class_model_against_age-band.png>
+Package pdftex.def Info: ../Saved_Figs/LinearRegression_2_class_model_against_age-band.png  used on input line 133.
+(pdftex.def)             Requested size: 269.35349pt x 206.91618pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<../Saved_Figs/LogisticRegression_2_class_model_against_score.png, id=47, 395.3169pt x 310.94168pt>
+<../Saved_Figs/LogisticRegression_2_class_model_against_score.png, id=49, 400.55647pt x 307.68953pt>
 File: ../Saved_Figs/LogisticRegression_2_class_model_against_score.png Graphic file (type png)
 <use ../Saved_Figs/LogisticRegression_2_class_model_against_score.png>
-Package pdftex.def Info: ../Saved_Figs/LogisticRegression_2_class_model_against_score.png  used on input line 136.
-(pdftex.def)             Requested size: 272.07272pt x 213.99962pt.
+Package pdftex.def Info: ../Saved_Figs/LogisticRegression_2_class_model_against_score.png  used on input line 139.
+(pdftex.def)             Requested size: 269.35349pt x 206.91618pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<../Saved_Figs/LogisticRegression_2_class_model_against_summative.png, id=48, 395.3169pt x 310.94168pt>
+<../Saved_Figs/LogisticRegression_2_class_model_against_summative.png, id=50, 400.55647pt x 307.68953pt>
 File: ../Saved_Figs/LogisticRegression_2_class_model_against_summative.png Graphic file (type png)
 <use ../Saved_Figs/LogisticRegression_2_class_model_against_summative.png>
-Package pdftex.def Info: ../Saved_Figs/LogisticRegression_2_class_model_against_summative.png  used on input line 141.
-(pdftex.def)             Requested size: 272.07272pt x 213.99962pt.
+Package pdftex.def Info: ../Saved_Figs/LogisticRegression_2_class_model_against_summative.png  used on input line 145.
+(pdftex.def)             Requested size: 269.35349pt x 206.91618pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<../Saved_Figs/Importances.png, id=49, 396.94298pt x 373.99725pt>
+<../Saved_Figs/Importances.png, id=51, 395.3169pt x 364.60216pt>
 File: ../Saved_Figs/Importances.png Graphic file (type png)
 <use ../Saved_Figs/Importances.png>
-Package pdftex.def Info: ../Saved_Figs/Importances.png  used on input line 146.
-(pdftex.def)             Requested size: 272.07272pt x 256.34634pt.
+Package pdftex.def Info: ../Saved_Figs/Importances.png  used on input line 151.
+(pdftex.def)             Requested size: 269.35349pt x 248.42688pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<../Saved_Figs/Accuracy_against_iteration1.png, id=50, 388.45125pt x 312.9291pt>
+<../Saved_Figs/Accuracy_against_iteration1.png, id=52, 389.89665pt x 310.94168pt>
 File: ../Saved_Figs/Accuracy_against_iteration1.png Graphic file (type png)
 <use ../Saved_Figs/Accuracy_against_iteration1.png>
-Package pdftex.def Info: ../Saved_Figs/Accuracy_against_iteration1.png  used on input line 151.
-(pdftex.def)             Requested size: 272.07272pt x 219.18256pt.
+Package pdftex.def Info: ../Saved_Figs/Accuracy_against_iteration1.png  used on input line 157.
+(pdftex.def)             Requested size: 269.35349pt x 214.81569pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<../Saved_Figs/SVR_2_class_model_against_sum_click-Polynomial_Kernel.png, id=51, 393.1488pt x 312.9291pt>
-File: ../Saved_Figs/SVR_2_class_model_against_sum_click-Polynomial_Kernel.png Graphic file (type png)
-<use ../Saved_Figs/SVR_2_class_model_against_sum_click-Polynomial_Kernel.png>
-Package pdftex.def Info: ../Saved_Figs/SVR_2_class_model_against_sum_click-Polynomial_Kernel.png  used on input line 156.
-(pdftex.def)             Requested size: 272.07272pt x 216.5659pt.
+<../Saved_Figs/SVR-Polynomial-Kernel_2_class_model_against_sum-click.png, id=53, 438.13687pt x 326.11838pt>
+File: ../Saved_Figs/SVR-Polynomial-Kernel_2_class_model_against_sum-click.png Graphic file (type png)
+<use ../Saved_Figs/SVR-Polynomial-Kernel_2_class_model_against_sum-click.png>
+Package pdftex.def Info: ../Saved_Figs/SVR-Polynomial-Kernel_2_class_model_against_sum-click.png  used on input line 163.
+(pdftex.def)             Requested size: 269.35349pt x 200.48944pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<../Saved_Figs/Estimators_against_iteration.png, id=52, 400.55647pt x 312.9291pt>
+<../Saved_Figs/Estimators_against_iteration.png, id=54, 396.40096pt x 310.94168pt>
 File: ../Saved_Figs/Estimators_against_iteration.png Graphic file (type png)
 <use ../Saved_Figs/Estimators_against_iteration.png>
-Package pdftex.def Info: ../Saved_Figs/Estimators_against_iteration.png  used on input line 161.
-(pdftex.def)             Requested size: 272.07272pt x 212.56453pt.
+Package pdftex.def Info: ../Saved_Figs/Estimators_against_iteration.png  used on input line 169.
+(pdftex.def)             Requested size: 269.35349pt x 211.2952pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<../Saved_Figs/Accuracy_against_iteration2.png, id=53, 396.94298pt x 312.9291pt>
+<../Saved_Figs/Accuracy_against_iteration2.png, id=55, 387.72855pt x 310.94168pt>
 File: ../Saved_Figs/Accuracy_against_iteration2.png Graphic file (type png)
 <use ../Saved_Figs/Accuracy_against_iteration2.png>
-Package pdftex.def Info: ../Saved_Figs/Accuracy_against_iteration2.png  used on input line 166.
-(pdftex.def)             Requested size: 272.07272pt x 214.48882pt.
+Package pdftex.def Info: ../Saved_Figs/Accuracy_against_iteration2.png  used on input line 175.
+(pdftex.def)             Requested size: 269.35349pt x 216.01132pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<../Saved_Figs/heatmap.png, id=54, 426.03165pt x 357.19447pt>
+<../Saved_Figs/heatmap.png, id=56, 417.53993pt x 372.37117pt>
 File: ../Saved_Figs/heatmap.png Graphic file (type png)
 <use ../Saved_Figs/heatmap.png>
-Package pdftex.def Info: ../Saved_Figs/heatmap.png  used on input line 171.
-(pdftex.def)             Requested size: 544.14545pt x 456.25354pt.
+Package pdftex.def Info: ../Saved_Figs/heatmap.png  used on input line 181.
+(pdftex.def)             Requested size: 544.14545pt x 485.32112pt.
 
-Overfull \hbox (272.07272pt too wide) in paragraph at lines 171--173
+Overfull \hbox (272.07272pt too wide) in paragraph at lines 181--183
 [][]
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 175.
-[2 <../Saved_Figs/LinearRegression_2_class_model_against_score.png> <../Saved_Figs/LinearRegression_2_class_model_against_age_band.png> <../Saved_Figs/LogisticRegression_2_class_model_against_score.png>] [3 <../Saved_Figs/LogisticRegression_2_class_model_against_summative.png> <../Saved_Figs/Importances.png> <../Saved_Figs/Accuracy_against_iteration1.png> <../Saved_Figs/SVR_2_class_model_against_sum_click-Polynomial_Kernel.png> <../Saved_Figs/Estimators_against_iteration.png> <../Saved_Figs/Accuracy_against_iteration2.png>] [4
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 185.
+[2 <../Saved_Figs/LinearRegression_2_class_model_against_score.png> <../Saved_Figs/LinearRegression_2_class_model_against_age-band.png> <../Saved_Figs/LogisticRegression_2_class_model_against_score.png>] [3 <../Saved_Figs/LogisticRegression_2_class_model_against_summative.png> <../Saved_Figs/Importances.png> <../Saved_Figs/Accuracy_against_iteration1.png> <../Saved_Figs/SVR-Polynomial-Kernel_2_class_model_against_sum-click.png> <../Saved_Figs/Estimators_against_iteration.png> <../Saved_Figs/Accuracy_against_iteration2.png>] [4
 
  <../Saved_Figs/heatmap.png>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 175.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 185.
  (/Users/jules/Documents/Year 2/Software Methodologies/ML/ML Coursework/tex/report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 175.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 175.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 185.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 185.
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: D964D6F7881C73B5E7B2BFA68243CBBA;291.
 
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: There were multiply-defined labels.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 175.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 185.
  ) 
 Here is how much of TeX's memory you used:
- 20826 strings out of 492649
- 384965 string characters out of 6129621
- 476112 words of memory out of 5000000
- 24314 multiletter control sequences out of 15000+600000
+ 20825 strings out of 492649
+ 384961 string characters out of 6129621
+ 478145 words of memory out of 5000000
+ 24313 multiletter control sequences out of 15000+600000
  14460 words of font info for 44 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 59i,9n,94p,489b,350s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 59i,9n,94p,489b,358s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb>
-Output written on "/Users/jules/Documents/Year 2/Software Methodologies/ML/ML Coursework/tex/report.pdf" (4 pages, 4029866 bytes).
+Output written on "/Users/jules/Documents/Year 2/Software Methodologies/ML/ML Coursework/tex/report.pdf" (4 pages, 1898676 bytes).
 PDF statistics:
- 123 PDF objects out of 1000 (max. 8388607)
- 86 compressed objects within 1 object stream
+ 126 PDF objects out of 1000 (max. 8388607)
+ 89 compressed objects within 1 object stream
  24 named destinations out of 1000 (max. 500000)
  108 words of extra memory for PDF output out of 10000 (max. 10000000)
 

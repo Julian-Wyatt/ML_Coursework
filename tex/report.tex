@@ -43,16 +43,16 @@ Machine learning \& data gathering are paramount for modern, cutting edge techno
 
 Firstly, I noticed useful features such as the score in the studentAssessment table, \& sum\_click in the studentVle table.
 Therefore I started by grouping the sum\_click and score features, finding the net clicks within the portal for a given student through the year \& their average mark. 
-I expected these features to show a positive correlation because typically higher scores and grades may come from more effort which is implied by the portal visits. N.b. This is shown in \ref{table:heatmap}.
+I expected these features to show a positive correlation because higher scores and grades generally correlate with high effort (implied by the portal visits). N.b. This is shown in table \ref{table:Correlations}.
 Then, I plotted the data and noticed that a logistic regression model should perform highly. 
-I added more data to my model, to use as much data as possible so the model can find patterns easier.
-Further, I calculated how many days early a student submitted coursework using the date submitted column.
+I added more data to my model, intending to use as much data as possible to aid the model in finding patterns.
+Further, I calculated how many days early a student submitted coursework using the date\_submitted column.
 Ideally, I expected a positive correlation as the student would be more prepared and committed.
 In addition, I calculated their summative and formative (where their weight is 0) marks. 
 % I noticed this gradually improved the performance of my model, so I continued adding further data.
-I eventually included almost all of the data available, so I started to look at the data differently so I included the mean, mean absolute deviation, standard deviation, variance etc for the scores of students' coursework.
-This, therefore, can find patterns from extrapolated data to squeeze more patterns out of the schema. 
-I then produced a correlation heatmap as seen below, as well as the sorted numerical correlations.
+I eventually included almost all of the data available, so I started to interpret the data differently, including the mean, median, mean absolute deviation, standard deviation \& variance for the scores of students' coursework.
+This, therefore, uses the extrapolated data to find deduce better predictions from the schema. 
+I then produced a correlation heatmap, as well as the sorted numerical correlations.
 
 
 \begin{table}[H]
@@ -73,7 +73,7 @@ I then produced a correlation heatmap as seen below, as well as the sorted numer
 		\label{table:Correlations}
 \end{table}
 
-Surprisingly, age\_band has a poor correlation; in theory, you would expect a mild negative correlation. Although this could be because of the limited data (3 unique ranges). To improve this correlation, I would need specific precise data.
+Surprisingly, age\_band has a poor correlation; in theory, you would expect a mild negative correlation. Although this could be because of the limited data (3 unique ranges). To improve this correlation, I would need specific \& precise data.
 
 After data gathering, I preprocessed the data, with an imputer and scaler. The imputer changes all NA values to the median of that feature. 
 While the scaler, normalises features to be within $0-1$, this prevents feature domination with large ranges and makes the features unit dependent.
@@ -87,17 +87,18 @@ The following phase involved selecting models. Here, I split the data into train
 
 \section{Model A - Logistic Regression}
 
-Moving on to hyperparameter tuning. For this model, I decided to use a grid search to validate the best combination within the combinations I provided. 
+Moving on to hyperparameter tuning. For this model, I decided to use a grid search to validate the best combination within the specified domain. 
 I gave the model, two potential sets of combinations, the first, cycled through the C value, which is the regularisation strength; smaller values show a stronger strength, 
-so I started with a strong logarithmic scale to check through, until after enough testing I reached a range of 850-1000. It also cycled through the tolerance value with small values around the default of 0.0001.
-The other set of combinations check a the same values of C and adjusts the solver \& penalty used. Finally, I removed the second set of combinations as it did not prove to help increase accuracy.
+so I started with a strong logarithmic scale to check through, until after enough testing I reached a range of 950-1050. It also cycled through the tolerance value with small values around the default of 0.0001.
+The other set of combinations check the same values of C and adjust the solver \& penalty used. Finally, I removed the second set of combinations as it did not prove to help increase performance.
 
 \section{Model B - Random Forest Classifier}
 
-Then, I tuned my random forest classifier, initially using a random search. This randomly picks n combinations to validate the model against based on the chosen parameters.
+Then, I tuned my random forest classifier, initially using a random search. This randomly picks n combinations to validate the model against from the parameter domain space.
 I decided to check the number of estimators (trees in the forest), the max depth of each tree in the forest, the minimum number of samples required at a leaf node, \& the minimum number of samples required to split an internal node.
 I moved on to use bayesian optimisation in order to minimise this complex search problem. This uses the previous iterations to strategically pick the next best parameters to pick from the search space with the aim of reducing the loss function. 
-Following on, I remove the unimportant features from the forest's feature importances \ref{} and hyper tune again in order to further improve the model. I noticed during this, the number of estimators showed little correlation for the model improving the loss function \ref{}.  
+Following on, I removed the unimportant features from the forest's feature importances \ref{fig:importances} and hyper tune again in order to further improve the model. I noticed during this, the number of estimators showed little correlation for the model improving the loss function \ref{fig:estimators}.  
+
 \section{Conclusion}
 
 \begin{table}[H]
@@ -123,53 +124,62 @@ Upon further inspection and validation on the testing data set, the maxiumum err
 \section*{Appendix}
 
 \begin{figure}[h]
-	\includegraphics[width=\linewidth]{LinearRegression_2_class_model_against_score.png} 
+	\includegraphics[width=0.99\linewidth]{LinearRegression_2_class_model_against_score.png} 
 	\label{fig:LinScore}
+	\caption{Linear Regression 2 class model fitted against score}
 \end{figure}
 \centering
 \begin{figure}[h]
-	\includegraphics[width=\linewidth]{LinearRegression_2_class_model_against_age_band.png} 
+	\includegraphics[width=0.99\linewidth]{LinearRegression_2_class_model_against_age-band.png} 
 	\label{fig:LinAge}
+	\caption{Linear Regression 2 class model fitted against age-band}
 \end{figure}
 \centering
 \begin{figure}[h]
-	\includegraphics[width=\linewidth]{LogisticRegression_2_class_model_against_score.png} 
+	\includegraphics[width=0.99\linewidth]{LogisticRegression_2_class_model_against_score.png} 
 	\label{fig:LogScore}
+	\caption{Logistic Regression 2 class model fitted against score}
 \end{figure}
 \centering
 \begin{figure}[h]
-	\includegraphics[width=\linewidth]{LogisticRegression_2_class_model_against_summative.png} 
+	\includegraphics[width=0.99\linewidth]{LogisticRegression_2_class_model_against_summative.png} 
 	\label{fig:LogSumm}
+	\caption{}
 \end{figure}
 \centering
 \begin{figure}[h]
-	\includegraphics[width=\linewidth]{Importances.png} 
+	\includegraphics[width=0.99\linewidth]{Importances.png} 
 	\label{fig:importances}
+	\caption{}
 \end{figure}
 \centering
 \begin{figure}[h]
-	\includegraphics[width=\linewidth]{Accuracy_against_iteration1.png} 
+	\includegraphics[width=0.99\linewidth]{Accuracy_against_iteration1.png} 
 	\label{fig:Acc1}
+	\caption{}
 \end{figure}
 \centering
 \begin{figure}[h]
-	\includegraphics[width=\linewidth]{SVR_2_class_model_against_sum_click-Polynomial_Kernel.png} 
+	\includegraphics[width=0.99\linewidth]{SVR-Polynomial-Kernel_2_class_model_against_sum-click.png} 
 	\label{fig:PolyClicks}
+	\caption{}
 \end{figure}
 \centering
 \begin{figure}[h]
-	\includegraphics[width=\linewidth]{Estimators_against_iteration.png} 
+	\includegraphics[width=0.99\linewidth]{Estimators_against_iteration.png} 
 	\label{fig:estimators}
+	\caption{}
 \end{figure}
 \centering
 \begin{figure}[h]
-	\includegraphics[width=\linewidth]{Accuracy_against_iteration2.png} 
+	\includegraphics[width=0.99\linewidth]{Accuracy_against_iteration2.png} 
 	\label{fig:Acc2}
+	\caption{}
 \end{figure}
 
 \begin{figure}[b]
 	\includegraphics[width=2\linewidth]{heatmap.png} 
-	\label{fig:Acc2}
+	\label{fig:heatmap}
 \end{figure}
 
 \end{document}
