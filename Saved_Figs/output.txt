@@ -287,200 +287,191 @@ Finished Model Selection - Time elapsed 3411.81
 
 
 Hyper Parameter Tuning:
-The Logistic Regression Model produced a mean best score of 69.592% in Hyper Tuning
-The parameters which produced this score are {'C': 900, 'tol': 0.00015}
-Finished modelA hyper parameter tuning - Time elapsed 13890.95
-100%|██████████| 800/800 [10:43:49<00:00, 48.29s/trial, best loss: 0.834776440952887]
-{'state': 2, 'tid': 746, 'spec': None, 'result': {'loss': 0.834776440952887, 'params': {'class_weight': None, 'max_depth': 101, 'min_samples_leaf': 1, 'min_samples_split': 12, 'n_estimators': 1068}, 'status': 'ok'}, 'misc': {'tid': 746, 'cmd': ('domain_attachment', 'FMinIter_Domain'), 'workdir': None, 'idxs': {'0': [], '1': [], '2': [], '3': [], 'class_weight': [746], 'max_depth': [746], 'min_samples_leaf': [746], 'min_samples_split': [746], 'n_estimators': [746]}, 'vals': {'0': [], '1': [], '2': [], '3': [], 'class_weight': [0], 'max_depth': [100], 'min_samples_leaf': [0], 'min_samples_split': [10], 'n_estimators': [1067]}}, 'exp_key': None, 'owner': None, 'version': 0, 'book_time': datetime.datetime(2020, 4, 18, 20, 7, 22, 876000), 'refresh_time': datetime.datetime(2020, 4, 18, 20, 9, 5, 423000)}
-The parameters which produced this score are {'class_weight': None, 'max_depth': 101, 'min_samples_leaf': 1, 'min_samples_split': 12, 'n_estimators': 1068}
-Finished modelB hyper parameter tuning round 1 - Time elapsed 43018.17
-
-
+The Logistic Regression Model produced a mean best score of 71.498% in Hyper Tuning
+The parameters which produced this score are {'C': 1000, 'tol': 0.00015}
+Finished modelA hyper parameter tuning - Time elapsed 5376.96
+100%|██████████| 800/800 [5:51:07<00:00, 26.33s/trial, best loss: 0.8388070267804977]
+{'state': 2, 'tid': 684, 'spec': None, 'result': {'loss': 0.8388070267804977, 'params': {'class_weight': None, 'max_depth': 220, 'min_samples_leaf': 4, 'min_samples_split': 10, 'n_estimators': 532}, 'status': 'ok', 'acc': 0.7515139785730951, 'f1': 0.7362489912522905, 'balAcc': 0.6734300033941167}, 'misc': {'tid': 684, 'cmd': ('domain_attachment', 'FMinIter_Domain'), 'workdir': None, 'idxs': {'0': [], '1': [], '2': [], '3': [], 'class_weight': [684], 'max_depth': [684], 'min_samples_leaf': [684], 'min_samples_split': [684], 'n_estimators': [684]}, 'vals': {'0': [], '1': [], '2': [], '3': [], 'class_weight': [0], 'max_depth': [219], 'min_samples_leaf': [3], 'min_samples_split': [8], 'n_estimators': [531]}}, 'exp_key': None, 'owner': None, 'version': 0, 'book_time': datetime.datetime(2020, 4, 21, 5, 25, 18, 839000), 'refresh_time': datetime.datetime(2020, 4, 21, 5, 26, 9, 891000)}
+The Random Forest Classifier Model produced a best loss of 83.881% in Hyper Tuning
+The parameters which produced this score are {'class_weight': None, 'max_depth': 220, 'min_samples_leaf': 4, 'min_samples_split': 10, 'n_estimators': 532}
+Finished modelB hyper parameter tuning round 1 - Time elapsed 26496.11
 Removing unimportant features and tuning again
-Variable: summativeAgainstCredits             Importance: 0.13786
-Variable: summative                           Importance: 0.09504
-Variable: totalScore                          Importance: 0.06517
-Variable: score                               Importance: 0.04432
-Variable: totalCoursework                     Importance: 0.04247
-Variable: student_Meds                        Importance: 0.03634
-Variable: sum_click                           Importance: 0.03629
-Variable: student_var                         Importance: 0.02421
-Variable: student_Std                         Importance: 0.02304
-Variable: student_mad                         Importance: 0.02274
-Variable: daysEarlyAvgScore                   Importance: 0.02207
-Variable: assessment_Mean                     Importance: 0.01899
-Variable: assessment_mad                      Importance: 0.01834
-Variable: daysEarly                           Importance: 0.01819
-Variable: stu_type_mean                       Importance: 0.01789
-Variable: daysEarlyMadScore                   Importance: 0.01788
-Variable: assessment_var                      Importance: 0.01769
-Variable: assessment_Std                      Importance: 0.01694
-Variable: sum_click_student_std               Importance: 0.01693
-Variable: assessment_Meds                     Importance: 0.01683
-Variable: sum_click_student_mad               Importance: 0.01674
-Variable: sum_click_student_var               Importance: 0.01653
-Variable: daysEarlyMedScore                   Importance: 0.0165
-Variable: assessment_type_mean                Importance: 0.01637
-Variable: daysEarlystdScore                   Importance: 0.01631
-Variable: daysEarlyvarScore                   Importance: 0.01575
-Variable: studied_credits                     Importance: 0.01195
-Variable: sum_click_assessment_mad            Importance: 0.01063
-Variable: sum_click_assessment_mean           Importance: 0.0097
-Variable: sum_click_assessment_std            Importance: 0.00948
-Variable: sum_click_assessment_var            Importance: 0.00921
-Variable: formative                           Importance: 0.00895
-Variable: sum_click_assessment_med            Importance: 0.00822
-Variable: imd_bandMadScore                    Importance: 0.00611
-Variable: imd_bandstdScore                    Importance: 0.00597
-Variable: imd_band                            Importance: 0.00596
-Variable: imd_bandAvgScore                    Importance: 0.00593
-Variable: imd_bandvarScore                    Importance: 0.00593
-Variable: imd_bandMedScore                    Importance: 0.00587
-Variable: is_banked                           Importance: 0.0053
-Variable: code_module_GGG                     Importance: 0.0053
-Variable: module_presentation_length          Importance: 0.00489
-Variable: code_module_CCC                     Importance: 0.00485
-Variable: highest_education                   Importance: 0.00461
-Variable: region_Scotland                     Importance: 0.00349
-Variable: region_Wales                        Importance: 0.00318
-Variable: sum_click_student_med               Importance: 0.003
-Variable: code_presentation_2014J             Importance: 0.00247
-Variable: gender                              Importance: 0.00243
-Variable: code_module_EEE                     Importance: 0.00238
-Variable: code_module_FFF                     Importance: 0.0022
-Variable: code_module_BBB                     Importance: 0.00211
-Variable: num_of_prev_attempts                Importance: 0.00184
-Variable: num_of_prev_attemptsAvgScore        Importance: 0.0018
-Variable: region_North Western Region         Importance: 0.0018
-Variable: disability                          Importance: 0.00178
-Variable: num_of_prev_attemptsMedScore        Importance: 0.00174
-Variable: num_of_prev_attemptsMadScore        Importance: 0.00172
-Variable: region_East Anglian Region          Importance: 0.00171
-Variable: region_London Region                Importance: 0.0017
-Variable: code_module_DDD                     Importance: 0.00169
-Variable: num_of_prev_attemptsstdScore        Importance: 0.00167
-Variable: num_of_prev_attemptsvarScore        Importance: 0.0016
-Variable: region_West Midlands Region         Importance: 0.00155
-Variable: region_East Midlands Region         Importance: 0.00149
-Variable: region_South West Region            Importance: 0.00148
-Variable: region_South East Region            Importance: 0.00147
-Variable: code_presentation_2014B             Importance: 0.00146
-Variable: region_South Region                 Importance: 0.00144
-Variable: code_presentation_2013J             Importance: 0.00138
-Variable: region_Yorkshire Region             Importance: 0.00137
-Variable: region_Ireland                      Importance: 0.00131
-Variable: age_band                            Importance: 0.00125
-Variable: code_presentation_2013B             Importance: 0.00125
-Variable: age_bandstdScore                    Importance: 0.00123
-Variable: age_bandAvgScore                    Importance: 0.00122
-Variable: age_bandvarScore                    Importance: 0.00121
-Variable: age_bandMedScore                    Importance: 0.00119
-Variable: age_bandMadScore                    Importance: 0.00119
-Variable: region_North Region                 Importance: 0.00109
-Variable: code_module_AAA                     Importance: 0.00082
-100%|██████████| 1000/1000 [11:55:57<00:00, 42.96s/trial, best loss: 0.8052601663964003]
-The parameters which produced this score are {'class_weight': {0: 8.914762172700874, 1: 8.30378277944787, 2: 3.2286530565965488, 3: 9.875677541093014}, 'max_depth': 258, 'min_samples_leaf': 2, 'min_samples_split': 24, 'n_estimators': 579}
-Finished modelB hyper parameter tuning round 2 - Time elapsed 86032.50
+Variable: summativeAgainstCredits             Importance: 0.13538
+Variable: summative                           Importance: 0.10431
+Variable: totalScore                          Importance: 0.06798
+Variable: score                               Importance: 0.04671
+Variable: totalCoursework                     Importance: 0.04328
+Variable: sum-click                           Importance: 0.03608
+Variable: student-Meds                        Importance: 0.03606
+Variable: student-mad                         Importance: 0.02342
+Variable: student-var                         Importance: 0.02317
+Variable: daysEarlyAvgScore                   Importance: 0.02228
+Variable: student-Std                         Importance: 0.02176
+Variable: assessment-Mean                     Importance: 0.01902
+Variable: assessment-mad                      Importance: 0.01839
+Variable: daysEarlyMedScore                   Importance: 0.01801
+Variable: assessment-Std                      Importance: 0.01775
+Variable: stu-type-mean                       Importance: 0.01715
+Variable: assessment-var                      Importance: 0.01711
+Variable: assessment-Meds                     Importance: 0.01651
+Variable: daysEarly                           Importance: 0.01615
+Variable: daysEarlyMadScore                   Importance: 0.01608
+Variable: daysEarlyvarScore                   Importance: 0.01573
+Variable: sum-click-student-std               Importance: 0.01566
+Variable: daysEarlystdScore                   Importance: 0.01563
+Variable: assessment-type-mean                Importance: 0.01551
+Variable: sum-click-student-var               Importance: 0.01511
+Variable: id-student                          Importance: 0.01498
+Variable: sum-click-student-mad               Importance: 0.01496
+Variable: formative                           Importance: 0.0125
+Variable: studied-credits                     Importance: 0.01063
+Variable: sum-click-assessment-mad            Importance: 0.01047
+Variable: sum-click-assessment-std            Importance: 0.00976
+Variable: sum-click-assessment-mean           Importance: 0.00927
+Variable: sum-click-assessment-var            Importance: 0.00922
+Variable: sum-click-assessment-med            Importance: 0.0084
+Variable: imd-bandMadScore                    Importance: 0.00608
+Variable: imd-band                            Importance: 0.006
+Variable: imd-bandAvgScore                    Importance: 0.00583
+Variable: imd-bandvarScore                    Importance: 0.00583
+Variable: code-module-GGG                     Importance: 0.00575
+Variable: imd-bandMedScore                    Importance: 0.00572
+Variable: imd-bandstdScore                    Importance: 0.00564
+Variable: is-banked                           Importance: 0.00482
+Variable: code-module-CCC                     Importance: 0.00481
+Variable: module-presentation-length          Importance: 0.00469
+Variable: highest-education                   Importance: 0.00391
+Variable: sum-click-student-med               Importance: 0.00271
+Variable: region-Scotland                     Importance: 0.00249
+Variable: code-presentation-2014J             Importance: 0.00245
+Variable: code-module-EEE                     Importance: 0.00238
+Variable: gender                              Importance: 0.00234
+Variable: code-module-FFF                     Importance: 0.00208
+Variable: region-Wales                        Importance: 0.00201
+Variable: code-module-BBB                     Importance: 0.00195
+Variable: code-module-DDD                     Importance: 0.00177
+Variable: code-presentation-2013J             Importance: 0.00145
+Variable: code-presentation-2014B             Importance: 0.00139
+Variable: age-bandAvgScore                    Importance: 0.00123
+Variable: age-band                            Importance: 0.00121
+Variable: age-bandMedScore                    Importance: 0.00121
+Variable: num-of-prev-attemptsMedScore        Importance: 0.00121
+Variable: num-of-prev-attempts                Importance: 0.00119
+Variable: age-bandstdScore                    Importance: 0.00119
+Variable: num-of-prev-attemptsMadScore        Importance: 0.00119
+Variable: age-bandMadScore                    Importance: 0.00118
+Variable: age-bandvarScore                    Importance: 0.00117
+Variable: num-of-prev-attemptsAvgScore        Importance: 0.00117
+Variable: code-presentation-2013B             Importance: 0.00116
+Variable: num-of-prev-attemptsstdScore        Importance: 0.00097
+Variable: disability                          Importance: 0.00094
+Variable: num-of-prev-attemptsvarScore        Importance: 0.00089
+Variable: region-North Western Region         Importance: 0.00086
+Variable: code-module-AAA                     Importance: 0.00086
+Variable: region-London Region                Importance: 0.00085
+Variable: region-East Anglian Region          Importance: 0.00082
+Variable: region-South Region                 Importance: 0.00071
+Variable: region-West Midlands Region         Importance: 0.00066
+Variable: region-South West Region            Importance: 0.00059
+Variable: region-East Midlands Region         Importance: 0.00056
+Variable: region-South East Region            Importance: 0.00049
+Variable: region-Yorkshire Region             Importance: 0.00043
+Variable: region-Ireland                      Importance: 0.00039
+Variable: region-North Region                 Importance: 0.00029
+100%|██████████| 1000/1000 [7:03:08<00:00, 25.39s/trial, best loss: 0.8007381323904094]
+The Random Forest Classifier Model produced a best loss of 80.074% in Hyper Tuning
+The parameters which produced this score are {'class_weight': {0: 5.782874553042878, 1: 7.369350825881744, 2: 3.1779373660769465, 3: 6.692846398714134}, 'max_depth': 91, 'min_samples_leaf': 11, 'min_samples_split': 19, 'n_estimators': 364}
+Finished modelB hyper parameter tuning round 2 - Time elapsed 51925.34
 
 
-
-Final Logistic Regression Model:
-Max Error: 3.000
-Explained Varience Score: 0.593
-Mean Absolute Error: 0.339
-Mean Square Error: 0.413
-Root Mean Square Error: 0.643
-Median Absolute Error: 0.000
-r2 Score (Accuracy): 0.591
-Accuracy Score: 0.698
+Final Logistic Regression Model - 4 Class:
+Explained Variance Score: 0.664
+Mean Absolute Error: 0.300
+Mean Square Error: 0.342
+Root Mean Square Error: 0.585
+r2 Score (Accuracy): 0.662
+Accuracy Score: 0.721
               precision    recall  f1-score   support
 
- Distinction      0.690     0.497     0.578       783
-        Fail      0.535     0.345     0.419      1701
-        Pass      0.748     0.857     0.799      3121
-   Withdrawn      0.699     0.801     0.747      2544
+ Distinction      0.697     0.497     0.580       783
+        Fail      0.561     0.376     0.450      1701
+        Pass      0.775     0.880     0.824      3121
+   Withdrawn      0.722     0.824     0.770      2544
 
-    accuracy                          0.698      8149
-   macro avg      0.668     0.625     0.636      8149
-weighted avg      0.683     0.698     0.682      8149
+    accuracy                          0.721      8149
+   macro avg      0.689     0.644     0.656      8149
+weighted avg      0.706     0.721     0.706      8149
 
              Withdrawn  Fail  Pass  Distinction
-Withdrawn         2037   367   138            2
-Fail               733   586   381            1
-Pass               139   135  2675          172
-Distinction          4     7   383          389
+Withdrawn         2097   373    72            2
+Fail               723   640   335            3
+Pass                84   125  2748          164
+Distinction          1     3   390          389
 
 
-Final Logistic Regression Model:
-Max Error: 1.000
-Explained Varience Score: 0.623
-Mean Absolute Error: 0.094
-Mean Square Error: 0.094
-Root Mean Square Error: 0.307
-Median Absolute Error: 0.000
-r2 Score (Accuracy): 0.622
-Accuracy Score: 0.906
+Final Logistic Regression Model - 2 Class:
+Explained Variance Score: 0.697
+Mean Absolute Error: 0.076
+Mean Square Error: 0.076
+Root Mean Square Error: 0.275
+r2 Score (Accuracy): 0.697
+Accuracy Score: 0.924
               precision    recall  f1-score   support
 
-        Fail      0.920     0.897     0.908      4245
-        Pass      0.891     0.916     0.903      3904
+        Fail      0.937     0.916     0.927      4245
+        Pass      0.911     0.933     0.922      3904
 
-    accuracy                          0.906      8149
-   macro avg      0.906     0.906     0.906      8149
-weighted avg      0.906     0.906     0.906      8149
+    accuracy                          0.924      8149
+   macro avg      0.924     0.925     0.924      8149
+weighted avg      0.925     0.924     0.924      8149
 
       Fail  Pass
-Fail  3806   439
-Pass   329  3575
+Fail  3889   356
+Pass   261  3643
 
 
-Final Random Forest Classifier Model:
-Explained Varience Score: 0.729
+Final Random Forest Classifier Model - 4 Class:
+Explained Variance Score: 0.729
 Mean Absolute Error: 0.263
-Mean Square Error: 0.275
-Root Mean Square Error: 0.524
-r2 Score (Accuracy): 0.728
-Accuracy Score: 0.743
+Mean Square Error: 0.274
+Root Mean Square Error: 0.523
+r2 Score (Accuracy): 0.729
+Accuracy Score: 0.742
               precision    recall  f1-score   support
 
- Distinction      0.620     0.734     0.673       783
-        Fail      0.576     0.437     0.497      1701
-        Pass      0.843     0.816     0.829      3121
-   Withdrawn      0.751     0.859     0.802      2544
+ Distinction      0.641     0.683     0.661       783
+        Fail      0.558     0.494     0.524      1701
+        Pass      0.834     0.838     0.836      3121
+   Withdrawn      0.770     0.808     0.789      2544
 
-    accuracy                          0.743      8149
-   macro avg      0.698     0.712     0.700      8149
-weighted avg      0.737     0.743     0.736      8149
+    accuracy                          0.742      8149
+   macro avg      0.701     0.706     0.702      8149
+weighted avg      0.738     0.742     0.739      8149
 
              Withdrawn  Fail  Pass  Distinction
-Withdrawn         2186   338    18            2
-Fail               704   744   250            3
-Pass                19   208  2547          347
-Distinction          0     2   206          575
+Withdrawn         2056   462    22            4
+Fail               606   841   251            3
+Pass                 8   205  2615          293
+Distinction          0     0   248          535
 
 
-Final Random Forest Classifier Model:
-Explained Variance Score: 0.853
-Mean Absolute Error: 0.037
-Mean Square Error: 0.037
-Root Mean Square Error: 0.193
-r2 Score (Accuracy): 0.850
-Accuracy Score: 0.963
+Final Random Forest Classifier Model - 2 Class:
+Explained Variance Score: 0.823
+Mean Absolute Error: 0.045
+Mean Square Error: 0.045
+Root Mean Square Error: 0.213
+r2 Score (Accuracy): 0.819
+Accuracy Score: 0.955
               precision    recall  f1-score   support
 
-        Fail      0.989     0.939     0.963      4245
-        Pass      0.937     0.988     0.962      3904
+        Fail      0.985     0.927     0.955      4245
+        Pass      0.926     0.985     0.954      3904
 
-    accuracy                          0.963      8149
-   macro avg      0.963     0.964     0.963      8149
-weighted avg      0.964     0.963     0.963      8149
+    accuracy                          0.955      8149
+   macro avg      0.955     0.956     0.955      8149
+weighted avg      0.957     0.955     0.955      8149
 
       Fail  Pass
-Fail  3986   259
-Pass    46  3858
-Finished - Time elapsed 86060.37
-
-Process finished with exit code 0
-
-
-Process finished with exit code 0
+Fail  3937   308
+Pass    60  3844
+Finished - Time elapsed 51944.79

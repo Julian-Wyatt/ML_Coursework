@@ -4,7 +4,7 @@
 # pandas, numpy, sklearn, seaborn, matplotlib, hyperopt
 # Once these packages are installed - execute the code in terminal with python classifier.py
 # or through an IDE
-# Also note, the code will check for the data CVS's within the Dataset folder, if this fails, it will check in the cwd
+# Also note, the code will check for the OULAD CVSs within the ./Dataset folder, if this fails, it will check in the cwd
 # Similarly for saved figures, these will be saved in ./Saved_Figs - if this fails they will be saved in the cwd
 
 # random state seed to ensure repeatable metrics
@@ -749,13 +749,13 @@ def hypertuning(modelA, modelB):
         # therefore checks 6 * 5 = 30 combinations of results
         # uses the cross validation steps used earlier with 5 folds
         param_grid = [
-            # {"C": range(950,1125,25), "penalty": },
-            {"C": np.logspace(-3,3.5,10), "penalty":['l1','l2']},
-            # {"C": [10], "tol": [0.00016]},
+            {"C": range(950,1125,25), "tol": [0.00015, 0.0001,0.00014, 0.00016, 0.0002]},
+            # {"C": [0.001,0.01,0.1,1,10,100,1000,50w00], "tol": [0.00015, 0.0001,0.00014, 0.00016, 0.0002]},
+            # {"C": [10], "tol": [0.00015, 0.0001,0.00014, 0.00016, 0.0002]},
         ]
 
         LogGridSearch = model_selection.GridSearchCV(logRegr, param_grid, cv=5, return_train_score=True, n_jobs=-1,
-                                                     verbose=False)
+                                                     verbose=3)
         logSearch = LogGridSearch.fit(train[regreAttributes], train["final-result"])
 
         # the best parameters found are stored in best params
