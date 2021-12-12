@@ -1,5 +1,5 @@
-\documentclass[11pt, a4paper, twocolumn]{article}
-
+\documentclass[11pt, a4paper]{article}
+\usepackage{multicol}
 \usepackage{tikz}
 \usepackage{tikz,fullpage}
 \usetikzlibrary{arrows,%
@@ -20,6 +20,7 @@
 \usepackage[toc,page]{appendix}
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{multirow}
 \usepackage[lmargin=0.3in,rmargin=0.3in,tmargin=0.3in,bmargin=0.6in]{geometry}
 \graphicspath{  {../Saved_Figs/} {../Dataset/} }
 %opening
@@ -30,6 +31,7 @@
 \begin{document}
 
 \maketitle
+\begin{multicols}{2}
 
 \section{Data Gathering \& Analysis}
 
@@ -41,12 +43,12 @@ Machine learning \& data gathering are paramount for modern, cutting edge techno
 	\label{fig:schema}
 \end{figure}
 
-Firstly, I noticed useful features such as the score in the studentAssessment table, \& sum\_click in the studentVle table.
-Therefore I started by grouping the sum\_click and score features, finding the net clicks within the portal for a given student through the year \& their average mark. 
+Firstly, I noticed useful features such as the score in the studentAssessment table, \& sum-click in the studentVle table.
+Therefore I started by grouping the sum-click and score features, finding the net clicks within the portal for a given student through the year \& their average mark. 
 I expected these features to show a positive correlation because higher scores and grades generally correlate with high effort (implied by the portal visits). N.b. This is shown in table \ref{table:Correlations}.
 Then, I plotted the data and noticed that a logistic regression model should perform highly. 
 I added more data to my model, intending to use as much data as possible to aid the model in finding patterns.
-Further, I calculated how many days early a student submitted coursework using the date\_submitted column.
+Further, I calculated how many days early a student submitted coursework using the date-submitted column.
 Ideally, I expected a positive correlation as the student would be more prepared and committed.
 In addition, I calculated their summative and formative (where their weight is 0) marks. 
 % I noticed this gradually improved the performance of my model, so I continued adding further data.
@@ -59,13 +61,13 @@ I then produced a correlation heatmap, as well as the sorted numerical correlati
 	\centering
 	\begin{tabular}{|l|l|}
 		\hline
-		Feature                    & Correlation \\ \hline
+		\textbf{Feature}                    & \textbf{Correlation} \\ \hline
 		daysEarlystdScore            & $-0.259014$ \\ \hline
-		studied\_credits             & $-0.176016$ \\ \hline
-		region\_Wales                & $0.008382$  \\ \hline
-		age\_band                    & $0.068551$  \\ \hline
+		studied-credits             & $-0.176016$ \\ \hline
+		region-Wales                & $0.008382$  \\ \hline
+		age-band                    & $0.068551$  \\ \hline
 		score                        & $0.317339$  \\ \hline
-		sum\_click                   & $0.376107$  \\ \hline
+		sum-click                   & $0.376107$  \\ \hline
 		totalCoursework              & $0.427175$  \\ \hline
 		summativeAgainstCredits      & $0.490646$  \\ \hline
 		\end{tabular}
@@ -73,7 +75,7 @@ I then produced a correlation heatmap, as well as the sorted numerical correlati
 		\label{table:Correlations}
 \end{table}
 
-Surprisingly, age\_band has a poor correlation; in theory, you would expect a mild negative correlation. Although this could be because of the limited data (3 unique ranges). To improve this correlation, I would need specific \& precise data.
+Surprisingly, age-band has a poor correlation; in theory, you would expect a mild negative correlation. Although this could be because of the limited data (3 unique ranges). To improve this correlation, I would need specific \& precise data.
 
 After data gathering, I preprocessed the data, with an imputer and scaler. The imputer changes all NA values to the median of that feature. 
 While the scaler, normalises features to be within $0-1$, this prevents feature domination with large ranges and makes the features unit dependent.
@@ -82,8 +84,7 @@ Further, I exchanged region, code module and code presentation to columned data 
 \section{Model Selection}
 
 The following phase involved selecting models. Here, I split the data into train and test sets with a 75/25 split; then tested a variety of models and compared how they performed in cross-validation on the training data. 
-
-
+Generally, there was a wide performance range, with classifiers generally doing better than regressors. See table \ref{table:modelSelection} for further info. I decided to pick one regressor \& one classifier to explore: Logistic Regression \& Random Forest Classifier.
 
 \section{Model A - Logistic Regression}
 
@@ -94,91 +95,145 @@ The other set of combinations check the same values of C and adjust the solver \
 
 \section{Model B - Random Forest Classifier}
 
-Then, I tuned my random forest classifier, initially using a random search. This randomly picks n combinations to validate the model against from the parameter domain space.
+Initially, I used a random search to tune the classifier. This randomly picks n combinations to validate the model against from the parameter domain space.
 I decided to check the number of estimators (trees in the forest), the max depth of each tree in the forest, the minimum number of samples required at a leaf node, \& the minimum number of samples required to split an internal node.
 I moved on to use bayesian optimisation in order to minimise this complex search problem. This uses the previous iterations to strategically pick the next best parameters to pick from the search space with the aim of reducing the loss function. 
 Following on, I removed the unimportant features from the forest's feature importances \ref{fig:importances} and hyper tune again in order to further improve the model. I noticed during this, the number of estimators showed little correlation for the model improving the loss function \ref{fig:estimators}.  
 
 \section{Conclusion}
 
+% \begin{table}[H]
+% 	\centering
+% 	\begin{tabular}{l|l|l|}
+% 	\cline{2-3}
+% 												   & Logistic & Random Forrest \\ \hline
+% 	\multicolumn{1}{|l|}{Explained Var} 		   & 0.361                     & 0.604                           \\ \hline
+% 	\multicolumn{1}{|l|}{Mean Abs Err}       	   & 0.393                     & 0.405                           \\ \hline
+% 	\multicolumn{1}{|l|}{Mean Square Err}          & 0.513                     & 0.309                           \\ \hline
+% 	\multicolumn{1}{|l|}{RMSE}   				   & 0.716                     & 0.556                           \\ \hline
+% 	\multicolumn{1}{|l|}{Med Abs Err}    		   & 0.000                     & 0.318                           \\ \hline
+% 	\multicolumn{1}{|l|}{r2 Score}                 & 0.343                     & 0.604                           \\ \hline
+% 	\multicolumn{1}{|l|}{Best Score}               & 0.678                     & 0.590                           \\ \hline
+% 	\end{tabular}
+% 	\caption{Metrics of Final Models}
+% 	\label{table:metrics}
+% \end{table}
+
 \begin{table}[H]
 	\centering
-	\begin{tabular}{l|l|l|}
-	\cline{2-3}
-												   & Logistic & Random Forrest \\ \hline
-	\multicolumn{1}{|l|}{Explained Var} 		   & 0.361                     & 0.604                           \\ \hline
-	\multicolumn{1}{|l|}{Mean Abs Err}       	   & 0.393                     & 0.405                           \\ \hline
-	\multicolumn{1}{|l|}{Mean Square Err}          & 0.513                     & 0.309                           \\ \hline
-	\multicolumn{1}{|l|}{RMSE}   				   & 0.716                     & 0.556                           \\ \hline
-	\multicolumn{1}{|l|}{Med Abs Err}    		   & 0.000                     & 0.318                           \\ \hline
-	\multicolumn{1}{|l|}{r2 Score}                 & 0.343                     & 0.604                           \\ \hline
-	\multicolumn{1}{|l|}{Best Score}               & 0.678                     & 0.590                           \\ \hline
+	\renewcommand{\arraystretch}{1.2}
+	\begin{tabular}{|p{3.4cm}|c|c|c|c|}
+	  \hline
+	  \textbf{Model} & \multicolumn{2}{c|}{\textbf{Logistic}} & \multicolumn{2}{c|}{\textbf{Random Forest}}\\
+	  \cline{2-5}\hline
+	  \textbf{Classes}& \textbf{2} & \textbf{4} & \textbf{2} & \textbf{4}\\
+	  \hline
+	  Explained Var & TBD & TBD & TBD & TBD\\ \hline
+	  RMSE & TBD & TBD & TBD & TBD \\ \hline
+	  r2 Score & TBD & TBD & TBD & TBD  \\ \hline
+	  f1 Score \newline (Recall \& Precision) & TBD & TBD & TBD & TBD  \\ \hline
+	  f1 weighted average & TBD & TBD & TBD & TBD  \\ \hline
+	  Accuracy & TBD & TBD & TBD & TBD  \\ \hline
 	\end{tabular}
 	\caption{Metrics of Final Models}
 	\label{table:metrics}
-\end{table}
+  \end{table}
 
 In conclusion, the logistic regression model finished with an accuracy of 0.68\%, whereas the Random Forrest Model finished with an accuracy of 0.59\%, therefore making the logistic model initially more desirable.
 Upon further inspection and validation on the testing data set, the maxiumum error was 0.3 lower for the random forrest, \& the r2 score was 0.25 higher for random forrest, potentially making random forrest overall a better choice.
-
+% \newpage
 \section*{Appendix}
-
-\begin{figure}[h]
-	\includegraphics[width=0.99\linewidth]{LinearRegression_2_class_model_against_score.png} 
+\centering
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{LinearRegression_2_class_model_against_score.png} 
+	\caption{Linear Regression (2 class) against score}
 	\label{fig:LinScore}
-	\caption{Linear Regression 2 class model fitted against score}
 \end{figure}
 \centering
-\begin{figure}[h]
-	\includegraphics[width=0.99\linewidth]{LinearRegression_2_class_model_against_age-band.png} 
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{LinearRegression_2_class_model_against_age-band.png} 
+	\caption{Linear Regression (2 class) against age-band}
 	\label{fig:LinAge}
-	\caption{Linear Regression 2 class model fitted against age-band}
 \end{figure}
 \centering
-\begin{figure}[h]
-	\includegraphics[width=0.99\linewidth]{LogisticRegression_2_class_model_against_score.png} 
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{LogisticRegression_2_class_model_against_score.png} 
+	\caption{Logistic Regression (2 class) against score}
 	\label{fig:LogScore}
-	\caption{Logistic Regression 2 class model fitted against score}
 \end{figure}
 \centering
-\begin{figure}[h]
-	\includegraphics[width=0.99\linewidth]{LogisticRegression_2_class_model_against_summative.png} 
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{LogisticRegression_2_class_model_against_summative.png} 
+	\caption{Logistic Regression (2 class) against summative}
 	\label{fig:LogSumm}
-	\caption{}
 \end{figure}
 \centering
-\begin{figure}[h]
-	\includegraphics[width=0.99\linewidth]{Importances.png} 
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{Importances.png}
+	\caption{Cumulative Importances of Features}
 	\label{fig:importances}
-	\caption{}
 \end{figure}
 \centering
-\begin{figure}[h]
-	\includegraphics[width=0.99\linewidth]{Accuracy_against_iteration1.png} 
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{Accuracy_against_iteration1.png} 
+	\caption{Metrics against iteration 1}
 	\label{fig:Acc1}
-	\caption{}
 \end{figure}
 \centering
-\begin{figure}[h]
-	\includegraphics[width=0.99\linewidth]{SVR-Polynomial-Kernel_2_class_model_against_sum-click.png} 
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{SVR-Polynomial-Kernel_2_class_model_against_sum-click.png} 
+	\caption{SVR-Poly-Kernel (2 class) against sum-click}
 	\label{fig:PolyClicks}
-	\caption{}
 \end{figure}
 \centering
-\begin{figure}[h]
-	\includegraphics[width=0.99\linewidth]{Estimators_against_iteration.png} 
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{Estimators_against_iteration.png} 
+	\caption{Selected n-Estimators againts iteration}
 	\label{fig:estimators}
-	\caption{}
 \end{figure}
 \centering
-\begin{figure}[h]
-	\includegraphics[width=0.99\linewidth]{Accuracy_against_iteration2.png} 
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{Accuracy_against_iteration2.png} 
+	\caption{Metrics against iteration 2}
 	\label{fig:Acc2}
-	\caption{}
 \end{figure}
+\end{multicols}
+\newpage
+
+\begin{table}[t]
+	\centering
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		Model                 & n-Classes & Mean &Standard Deviation \\ \hline
+		Linear Regression & 4 & 0.604 & 0.010 \\ \hline
+		Logistic Regression & 4 & 0.702 & 0.007 \\ \hline
+		- & 3 & 0.767 & 0.005 \\ \hline
+		- & 2 & 0.915 & 0.003 \\ \hline
+		SVR Linear & 4 & 0.575 & 0.013 \\ \hline
+		SVR Poly & 4 & 0.746 & 0.008 \\ \hline
+		SVR RBF & 4 & 0.723 & 0.009 \\ \hline
+		SVC & 4 & 0.681 & 0.007 \\ \hline
+		- & 3 & 0.782 & 0.005 \\ \hline
+		- & 2 & 0.932 & 0.003 \\ \hline
+		Decision Tree & 4 & 0.674 & 0.003 \\ \hline
+		- & 3 & 0.755 & 0.005 \\ \hline
+		- & 2 & 0.915 & 0.002 \\ \hline
+		Random Forest & 4 & 0.748 & 0.005 \\ \hline
+		- & 3 & 0.809 & 0.005 \\ \hline
+		- & 2 & 0.942 & 0.003 \\ \hline
+		\end{tabular}
+	\caption{Model Selection CV Accuracy Metrics}
+	\label{table:modelSelection}
+\end{table}
+
+		
+
+	
 
 \begin{figure}[b]
-	\includegraphics[width=2\linewidth]{heatmap.png} 
+	\centering
+	\includegraphics[width=\linewidth]{heatmap.png} 
+	\caption{Correlation Heatmap}
 	\label{fig:heatmap}
 \end{figure}
 

@@ -551,10 +551,10 @@ def preprocessingFunction(modelData):
                           yticklabels=1,
                           annot=False, cbar_kws={'label': 'Correlation'})
     plt.xlabel('Features',fontsize=10)
-    plt.title('Correlation Heatmap', fontsize=17)
+    # plt.title('Correlation Heatmap', fontsize=17)
     figure = heatmap.get_figure()
     saveFigure("heatmap")
-
+    exit()
     return modelData
 
 # run above functions
