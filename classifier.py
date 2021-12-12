@@ -2,18 +2,32 @@
 # (although this code will attempt to install those missing *Checked on a UNIX based system)
 # package checklist
 # pandas, numpy, sklearn, seaborn, matplotlib, hyperopt
-# Once these packages are installed - execute the code in terminal with python classifier.py
+# to install a package write python3 -m pip install PACKAGE_NAME
+# Note: installing packages during the execution of the code below causes a segmentation fault on mira, so requires
+# rerunning afterward installing a package if running on mira.
+
+# Once these packages are installed - execute the code in terminal with
+# `python classifier.py` or `python3 classifier.py` depending on setup
 # or through an IDE
 # Also note, the code will check for the OULAD CVSs within the ./Dataset folder, if this fails, it will check in the cwd
 # Similarly for saved figures, these will be saved in ./Saved_Figs - if this fails they will be saved in the cwd
 
-# random state seed to ensure repeatable metrics
-random_state = 1024
+# import default python modules
+import os
+import sys
+import time
+import warnings
+warnings.filterwarnings('ignore')   # ignore division by 0 warning when measuring precision in RF hyper tuning
 
 # runs a command line process to install a package if an ImportError occurs
 import subprocess
 def install(package):
-    subprocess.run([sys.executable, "-m", "pip", "install", package, "--user"])
+    p = subprocess.Popen([sys.executable, "-m", "pip", "install", package, "--user"])
+    p.wait()
+    print("installed: ",package)
+    print("You may need to restart classifier.py if a segmentation fault is raised")
+    return p
+
 
 
 try:
@@ -25,20 +39,11 @@ except ImportError:
 try:
     from sklearn import *
     from sklearn import model_selection
-    from sklearn import utils
 except ImportError:
     install("sklearn")
     from sklearn import *
 
 from sklearn import model_selection
-from sklearn import utils
-
-# import default python modules
-import os
-import sys
-import time
-import warnings
-warnings.filterwarnings('ignore')   # ignore division by 0 warning when measuring precision in RF hyper tuning
 
 # import numpy & matplotlib
 try:
@@ -108,6 +113,10 @@ def plotSave(name, dataX, nameX, dataY, nameY):
 pandas.set_option('display.max_columns', 500)
 pandas.set_option('display.width', 1000)
 
+
+# random state seed to ensure repeatable metrics
+random_state = 1024
+
 #####################---DATA GATHERING---#####################
 
 # start by getting the time to check time taken
@@ -117,6 +126,7 @@ start = time.time()
 path = os.getcwd() + "/"
 
 def dataGather():
+    print("Gathering Data")
     '''
     Gather data from the csv's stored in ./Dataset/ or in ./
     :return: modelData - ie the gathered information stored about each row in stuInfo
@@ -554,7 +564,6 @@ def preprocessingFunction(modelData):
     # plt.title('Correlation Heatmap', fontsize=17)
     figure = heatmap.get_figure()
     saveFigure("heatmap")
-    exit()
     return modelData
 
 # run above functions
@@ -600,11 +609,11 @@ def modelSelectionScore(model,features, Name="", classes=4):
             model.__class__.__name__ + Name))
     scores = None
     if classes == 4:
-        scores = model_selection.cross_val_score(model, train[features], train["final-result"], cv=5)
+        scores = model_selection.cross_val_score(model, train[features], train["final-result"], cv=5, n_jobs=-1)
     elif classes == 3:
-        scores = model_selection.cross_val_score(model, train[features], train["final-result3"], cv=5)
+        scores = model_selection.cross_val_score(model, train[features], train["final-result3"], cv=5, n_jobs=-1)
     elif classes == 2:
-        scores = model_selection.cross_val_score(model, train[features], train["final-result2"], cv=5)
+        scores = model_selection.cross_val_score(model, train[features], train["final-result2"], cv=5, n_jobs=-1)
     else:
         exit()
 
@@ -749,13 +758,13 @@ def hypertuning(modelA, modelB):
         # therefore checks 6 * 5 = 30 combinations of results
         # uses the cross validation steps used earlier with 5 folds
         param_grid = [
+            # C is Inverse of the regularization strength - smaller values show a stronger strength,
+            # tol is the tolerance for stopping criteria
             {"C": range(950,1125,25), "tol": [0.00015, 0.0001,0.00014, 0.00016, 0.0002]},
-            # {"C": [0.001,0.01,0.1,1,10,100,1000,50w00], "tol": [0.00015, 0.0001,0.00014, 0.00016, 0.0002]},
-            # {"C": [10], "tol": [0.00015, 0.0001,0.00014, 0.00016, 0.0002]},
         ]
 
         LogGridSearch = model_selection.GridSearchCV(logRegr, param_grid, cv=5, return_train_score=True, n_jobs=-1,
-                                                     verbose=3)
+                                                     verbose=False)
         logSearch = LogGridSearch.fit(train[regreAttributes], train["final-result"])
 
         # the best parameters found are stored in best params
@@ -799,13 +808,18 @@ def hypertuning(modelA, modelB):
             return {"loss":loss, 'params': params, 'status': hyperopt.STATUS_OK,'acc':results["test_accuracy"].mean(),'f1':results["test_f1_weighted"].mean(),'balAcc': results["test_balanced_accuracy"].mean()}
 
         # Iterations of hypertuning
-        max_evals = 1000
+        max_evals = 1500
 
         # search space for the hyperparameter optimisation search problem
-        param_space = {"n_estimators":hyperopt.hp.choice("n_estimators", np.arange(1, 1000, dtype=int)),
+        param_space = {# number of trees in the forest
+                        "n_estimators":hyperopt.hp.choice("n_estimators", np.arange(1,1000, dtype=int)),
+                       # the max depth of each tree in the forest
                         "max_depth": hyperopt.hp.choice("max_depth",np.arange(1, 320, dtype=int)),
+                        # the minimum number of samples required at a leaf node
                         "min_samples_leaf": hyperopt.hp.choice("min_samples_leaf",np.arange(1, 320, dtype=int)),
+                        # the minimum number of samples required to split an internal node
                         "min_samples_split": hyperopt.hp.choice("min_samples_split",np.arange(2, 100, dtype=int)),
+                        # the weighting each class has
                         "class_weight":hyperopt.hp.choice("class_weight",[
                             None,{0:hyperopt.hp.uniform("0",0,10),1:hyperopt.hp.uniform("1",0,10), 2:
                                              hyperopt.hp.uniform("2",0,10), 3:hyperopt.hp.uniform("3",0,10)}
@@ -992,5 +1006,5 @@ def finalMetrics(truePredTuple):
     print(pandas.DataFrame(metrics.confusion_matrix(truePredTuple[0], truePredTuple[1]), index=category2String,
                            columns=category2String))
 
-# modelSelection()
+modelSelection()
 hypertuning(True, True)
